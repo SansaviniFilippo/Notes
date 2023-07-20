@@ -16,6 +16,8 @@ public:
     explicit NotesCollection(std::string n) : name(std::move(n)) {}
     void addNote(const Note& note);
     void removeNote(const Note& note);
+    void editNoteTitle(const Note& note, std::string newTitle);
+    void editNoteText(const Note& note, std::string newText);
     void printAllNotesTitle();
     void printAllNotes();
     void printOneNotes(const Note& note);

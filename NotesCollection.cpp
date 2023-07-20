@@ -51,3 +51,27 @@ void NotesCollection::printOneNotes(const Note& note) {
     else
         throw std::runtime_error("Note doesn't exist");
 }
+
+void NotesCollection::editNoteTitle(const Note& note, std::string newTitle) {
+    auto it = collection.find(note.getTitle());
+    if(it != collection.end()) {
+        if(!(it->second.isBlocked()))
+            it->second.setTitle(std::move(newTitle));
+        else
+            throw std::runtime_error("Note is blocked");
+    }
+    else
+        throw std::runtime_error("Note doesn't exist");
+}
+
+void NotesCollection::editNoteText(const Note& note, std::string newText) {
+    auto it = collection.find(note.getTitle());
+    if(it != collection.end()) {
+        if(!(it->second.isBlocked()))
+            it->second.setText(std::move(newText));
+        else
+            throw std::runtime_error("Note is blocked");
+    }
+    else
+        throw std::runtime_error("Note doesn't exist");
+}
