@@ -18,6 +18,7 @@ public:
     void removeNote(const Note& note);
     void printAllNotesTitle();
     void printAllNotes();
+    void printOneNotes(const Note& note);
     std::string getName() const;
     void setName(std::string n);
 private:

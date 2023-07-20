@@ -41,3 +41,13 @@ std::string NotesCollection::getName() const {
 void NotesCollection::setName(std::string n) {
     name = std::move(n);
 }
+
+void NotesCollection::printOneNotes(const Note& note) {
+    auto it = collection.find(note.getTitle());
+    if(it != collection.end()) {
+        std::cout << "Title : " << it->first << std::endl;
+        std::cout << "Text : " << it->second.getText() << std::endl;
+    }
+    else
+        throw std::runtime_error("Note doesn't exist");
+}
