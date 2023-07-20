@@ -14,8 +14,12 @@ void NotesCollection::addNote(const Note& note) {
 
 void NotesCollection::removeNote(const Note& note) {
     auto it = collection.find(note.getTitle());
-    if(it != collection.end())
-        collection.erase(it);
+    if(it != collection.end()) {
+        if(!(it->second.isBlocked()))
+            collection.erase(it);
+        else
+            throw std::runtime_error("Note is blocked");
+    }
     else
         throw std::runtime_error("Note doesn't exist");
 }
