@@ -13,7 +13,7 @@
 
 class NotesCollection {
 public:
-    NotesCollection(std::string n) : name(std::move(n)) {}
+    explicit NotesCollection(std::string n) : name(std::move(n)) {}
     void addNote(const Note& note);
     void removeNote(const Note& note);
     void printAllNotesTitle();
