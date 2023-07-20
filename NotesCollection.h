@@ -14,8 +14,8 @@
 class NotesCollection {
 public:
     NotesCollection(std::string n) : name(std::move(n)) {}
-    void addNote(Note note);
-    void removeNote(Note note);
+    void addNote(const Note& note);
+    void removeNote(const Note& note);
     void printAllNotesTitle();
     void printAllNotes();
     std::string getName() const;
