@@ -13,7 +13,6 @@ class App : public Observer {
 public:
     explicit App(std::unique_ptr<NotesCollection> s);
     ~App() override;
-    void print() const;
     void update() override;
     void attach() override;
     void detach() override;
