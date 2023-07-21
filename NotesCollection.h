@@ -17,12 +17,14 @@ class NotesCollection : public Subject {
 public:
     explicit NotesCollection(std::string n) : name(std::move(n)), noteNumber(0) {}
     void addNote(const Note& note);
-    void removeNote(const Note& note);
-    void editNoteTitle(const Note& note, std::string newTitle);
-    void editNoteText(const Note& note, std::string newText);
+    void removeNote(std::string noteTitle);
+    void editNoteTitle(const std::string& oldTitle, std::string newTitle);
+    void editNoteText(const std::string& noteTitle, std::string newText);
     void printAllNotesTitle();
     void printAllNotes();
-    void printOneNotes(const Note& note);
+    void printOneNotes(const std::string& noteTitle);
+    void block(const std::string& noteTitle);
+    void unblock(const std::string& noteTitle);
     std::string getName() const;
     void setName(std::string n);
 
