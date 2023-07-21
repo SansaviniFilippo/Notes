@@ -6,17 +6,23 @@
 
 void NotesCollection::addNote(const Note& note) {
     auto it = collection.find(note.getTitle());
-    if(it == collection.end())
+    if(it == collection.end()) {
         collection.insert(std::make_pair(note.getTitle(), note));
+        noteNumber++;
+        notify();
+    }
     else
         throw std::runtime_error("Note already exists");
 }
 
-void NotesCollection::removeNote(std::string noteTitle) {
+void NotesCollection::removeNote(const std::string& noteTitle) {
     auto it = collection.find(noteTitle);
     if(it != collection.end()) {
-        if(!(it->second.isBlocked()))
+        if(!(it->second.isBlocked())) {
             collection.erase(it);
+            noteNumber--;
+            notify();
+        }
         else
             throw std::runtime_error("Note is blocked");
     }
@@ -115,4 +121,8 @@ void NotesCollection::unblock(const std::string& noteTitle) {
     }
     else
         throw std::runtime_error("Note doesn't exist");
+}
+
+int NotesCollection::getNoteNumber() const {
+    return noteNumber;
 }

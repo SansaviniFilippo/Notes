@@ -17,7 +17,7 @@ class NotesCollection : public Subject {
 public:
     explicit NotesCollection(std::string n) : name(std::move(n)), noteNumber(0) {}
     void addNote(const Note& note);
-    void removeNote(std::string noteTitle);
+    void removeNote(const std::string& noteTitle);
     void editNoteTitle(const std::string& oldTitle, std::string newTitle);
     void editNoteText(const std::string& noteTitle, std::string newText);
     void printAllNotesTitle();
@@ -27,6 +27,7 @@ public:
     void unblock(const std::string& noteTitle);
     std::string getName() const;
     void setName(std::string n);
+    int getNoteNumber() const;
 
     ~NotesCollection() override = default;
     void subscribe(Observer* o) override;
