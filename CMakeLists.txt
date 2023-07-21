@@ -3,4 +3,4 @@ project(Notes)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Notes main.cpp Note.cpp Note.h NotesCollection.cpp NotesCollection.h)
+add_executable(Notes main.cpp Note.cpp Note.h NotesCollection.cpp NotesCollection.h Observer.h)
