@@ -8,16 +8,16 @@
 #include "Observer.h"
 #include "NotesCollection.h"
 #include <memory>
+#include <vector>
 
 class App : public Observer {
 public:
-    explicit App(std::unique_ptr<NotesCollection> s);
     ~App() override;
     void update() override;
-    void attach() override;
-    void detach() override;
+    void attach(Subject* collection) override;
+    void detach(Subject* collection) override;
 private:
-    std::unique_ptr<NotesCollection> subject;
+    std::vector<Subject*> collections;
 };
 
 #endif //NOTES_APP_H

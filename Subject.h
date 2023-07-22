@@ -7,6 +7,8 @@
 
 #include "Observer.h"
 
+class Observer;
+
 class Subject {
 public:
     virtual void subscribe(Observer* o) = 0;

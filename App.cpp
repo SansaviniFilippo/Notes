@@ -4,18 +4,35 @@
 
 #include "App.h"
 
-App::App(std::unique_ptr<NotesCollection> s) : subject(std::move(s)) {
-    attach();
-}
-
 App::~App() {
-    detach();
+    for(auto it = collections.begin(); it != collections.end(); it++) {
+        detach(*it);
+    }
 }
 
-void App::attach() {
-    subject->subscribe(this);
+void App::update() {
+    for(auto it = collections.begin(); it != collections.end(); it++) {
+        auto* collection = dynamic_cast<NotesCollection*>(*it);
+        if(collection) {
+            if(collection->getNoteNumber() == 1)
+                std::cout << "Collection " << collection->getName() << " has : 1 note." << std::endl;
+            else
+                std::cout << "Collection " << collection->getName() << " has : " << collection->getNoteNumber() << " notes." << std::endl;
+        }
+    }
 }
 
-void App::detach() {
-    subject->unsubscribe(this);
+void App::attach(Subject *collection) {
+    collections.push_back(collection);
+    collection->subscribe(this);
+}
+
+void App::detach(Subject *collection) {
+    for(auto it = collections.begin(); it != collections.end(); it++) {
+        if(*it == collection) {
+            collections.erase(it);
+            collection->unsubscribe(this);
+            break;
+        }
+    }
 }
