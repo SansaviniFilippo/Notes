@@ -14,8 +14,8 @@ class App : public Observer {
 public:
     ~App() override;
     void update() override;
-    void attach(Subject* collection) override;
-    void detach(Subject* collection) override;
+    void attach(Subject* subject) override;
+    void detach(Subject* subject) override;
 private:
     std::vector<Subject*> collections;
 };

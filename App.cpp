@@ -2,6 +2,7 @@
 // Created by filippo on 21/07/23.
 //
 
+#include <algorithm>
 #include "App.h"
 
 App::~App() {
@@ -22,17 +23,15 @@ void App::update() {
     }
 }
 
-void App::attach(Subject *collection) {
-    collections.push_back(collection);
-    collection->subscribe(this);
+void App::attach(Subject* subject) {
+    collections.push_back(subject);
+    subject->subscribe(this);
 }
 
-void App::detach(Subject *collection) {
-    for(auto it = collections.begin(); it != collections.end(); it++) {
-        if(*it == collection) {
-            collections.erase(it);
-            collection->unsubscribe(this);
-            break;
-        }
+void App::detach(Subject* subject) {
+    auto it = std::find(collections.begin(), collections.end(), subject);
+    if (it != collections.end()) {
+        subject->unsubscribe(this);
+        collections.erase(it);
     }
 }
