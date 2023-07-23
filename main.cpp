@@ -28,11 +28,11 @@ int main() {
 
 
     app.detach(&collection2);
-/*
+
     Note note4("Note 4", "This is a new note.");
     collection1.addNote(note4);
 
     app.update();
-*/
+
     return 0;
 }

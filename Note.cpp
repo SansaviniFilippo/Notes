@@ -18,10 +18,6 @@ bool Note::isBlocked() const {
     return blocked;
 }
 
-bool Note::isImportant() const {
-    return important;
-}
-
 void Note::setTitle(std::string ti) {
     title = std::move(ti);
 }
@@ -32,8 +28,4 @@ void Note::setText(std::string te) {
 
 void Note::setBlocked(bool bl) {
     blocked = bl;
-}
-
-void Note::setImportant(bool im) {
-    important = im;
 }
