@@ -23,16 +23,16 @@ int main() {
     app.update();
 
     collection1.editNoteText("Note 1", "This is the updated text for Note 1.");
+
     collection2.removeNote("Note 3");
 
-    app.update();
 
     app.detach(&collection2);
-
+/*
     Note note4("Note 4", "This is a new note.");
     collection1.addNote(note4);
 
     app.update();
-
+*/
     return 0;
 }

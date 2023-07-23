@@ -5,15 +5,11 @@
 #include <algorithm>
 #include "App.h"
 
-App::~App() {
-    for(auto it = collections.begin(); it != collections.end(); it++) {
-        detach(*it);
-    }
-}
+App::~App() = default;
 
 void App::update() {
     for(auto it = collections.begin(); it != collections.end(); it++) {
-        auto* collection = dynamic_cast<NotesCollection*>(*it);
+        auto* collection = dynamic_cast<NotesCollection*>(it->second);
         if(collection) {
             if(collection->getNoteNumber() == 1)
                 std::cout << "Collection " << collection->getName() << " has : 1 note." << std::endl;
@@ -24,14 +20,13 @@ void App::update() {
 }
 
 void App::attach(Subject* subject) {
-    collections.push_back(subject);
-    subject->subscribe(this);
+    auto* collection = dynamic_cast<NotesCollection*>(subject);
+    collections.insert(std::pair<std::string, Subject*>(collection->getName(), subject));
+    collection->subscribe(this);
 }
 
 void App::detach(Subject* subject) {
-    auto it = std::find(collections.begin(), collections.end(), subject);
-    if (it != collections.end()) {
-        subject->unsubscribe(this);
-        collections.erase(it);
-    }
+    auto* collection = dynamic_cast<NotesCollection*>(subject);
+    collections.erase(collection->getName());
+    collection->unsubscribe(this);
 }

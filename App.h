@@ -8,7 +8,7 @@
 #include "Observer.h"
 #include "NotesCollection.h"
 #include <memory>
-#include <vector>
+#include <map>
 
 class App : public Observer {
 public:
@@ -17,7 +17,7 @@ public:
     void attach(Subject* subject) override;
     void detach(Subject* subject) override;
 private:
-    std::vector<Subject*> collections;
+    std::map<std::string, Subject*> collections;
 };
 
 #endif //NOTES_APP_H
