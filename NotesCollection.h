@@ -16,15 +16,15 @@
 class NotesCollection : public Subject {
 public:
     explicit NotesCollection(std::string n) : name(std::move(n)), noteNumber(0) {}
-    void addNote(const Note& note);
-    void removeNote(const std::string& noteTitle);
-    void editNoteTitle(const std::string& oldTitle, std::string newTitle);
-    void editNoteText(const std::string& noteTitle, std::string newText);
+    void addNote(std::shared_ptr<Note> note);
+    void removeNote(std::shared_ptr<Note> note);
+    void editNoteTitle(std::shared_ptr<Note> note, std::string newTitle);
+    void editNoteText(std::shared_ptr<Note> note, std::string newText);
     void printAllNotesTitle();
     void printAllNotes();
-    void printOneNotes(const std::string& noteTitle);
-    void block(const std::string& noteTitle);
-    void unblock(const std::string& noteTitle);
+    void printOneNotes(std::shared_ptr<Note> note);
+    void block(std::shared_ptr<Note> note);
+    void unblock(std::shared_ptr<Note> note);
     std::string getName() const;
     void setName(std::string n);
     int getNoteNumber() const;
@@ -35,7 +35,7 @@ public:
     void notify() override;
 private:
     std::string name;
-    std::map<std::string, Note> collection;
+    std::list<std::shared_ptr<Note>> collection;
     std::list<Observer*> observers;
     int noteNumber;
 };

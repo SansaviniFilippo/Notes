@@ -4,10 +4,14 @@
 
 #include "NotesCollection.h"
 
-void NotesCollection::addNote(const Note& note) {
-    auto it = collection.find(note.getTitle());
-    if(it == collection.end()) {
-        collection.insert(std::make_pair(note.getTitle(), note));
+void NotesCollection::addNote(std::shared_ptr<Note> note) {
+    bool found = false;
+    for(auto it = collection.begin(); it != collection.end(); it++) {
+        if ((*it)->getTitle() == note->getTitle())
+            found = true;
+    }
+    if(!found) {
+        collection.push_back(std::move(note));
         noteNumber++;
         notify();
     }
@@ -15,32 +19,32 @@ void NotesCollection::addNote(const Note& note) {
         throw std::runtime_error("Note already exists");
 }
 
-void NotesCollection::removeNote(const std::string& noteTitle) {
-    auto it = collection.find(noteTitle);
-    if(it != collection.end()) {
-        if(!(it->second.isBlocked())) {
-            collection.erase(it);
-            noteNumber--;
-            notify();
+void NotesCollection::removeNote(std::shared_ptr<Note> note) {
+    for(auto it = collection.begin(); it != collection.end(); it++) {
+        if ((*it)->getTitle() == note->getTitle()) {
+            if((*it)->isBlocked())
+                throw std::runtime_error("Note is blocked");
+            else {
+                collection.erase(it);
+                noteNumber--;
+                notify();
+                return;
+            }
         }
-        else
-            throw std::runtime_error("Note is blocked");
     }
-    else
-        throw std::runtime_error("Note doesn't exist");
 }
 
 void NotesCollection::printAllNotesTitle() {
     std::cout << "Notes in " << name << ":" << std::endl;
     for(auto it = collection.begin(); it != collection.end(); it++)
-        std::cout << it->first << std::endl;
+        std::cout << (*it)->getTitle() << std::endl;
 }
 
 void NotesCollection::printAllNotes() {
     std::cout << "Titles and texts of notes in " << name << ":" << std::endl;
     for(auto it = collection.begin(); it != collection.end(); it++) {
-        std::cout << "Title : " << it->second.getTitle() << std::endl;
-        std::cout << "Text : " << it->second.getText() << std::endl;
+        std::cout << "Title : " << (*it)->getTitle() << std::endl;
+        std::cout << "Text : " << (*it)->getText() << std::endl;
     }
 }
 
@@ -52,38 +56,40 @@ void NotesCollection::setName(std::string n) {
     name = std::move(n);
 }
 
-void NotesCollection::printOneNotes(const std::string& noteTitle) {
-    auto it = collection.find(noteTitle);
-    if(it != collection.end()) {
-        std::cout << "Title : " << it->first << std::endl;
-        std::cout << "Text : " << it->second.getText() << std::endl;
+void NotesCollection::printOneNotes(std::shared_ptr<Note> note) {
+    for(auto it = collection.begin(); it != collection.end(); it++) {
+        if ((*it)->getTitle() == note->getTitle()) {
+            std::cout << "Title : " << (*it)->getTitle() << std::endl;
+            std::cout << "Text : " << (*it)->getText() << std::endl;
+            return;
+        }
     }
-    else
-        throw std::runtime_error("Note doesn't exist");
 }
 
-void NotesCollection::editNoteTitle(const std::string& oldTitle, std::string newTitle) {
-    auto it = collection.find(oldTitle);
-    if(it != collection.end()) {
-        if(!(it->second.isBlocked()))
-            it->second.setTitle(std::move(newTitle));
-        else
-            throw std::runtime_error("Note is blocked");
+void NotesCollection::editNoteTitle(std::shared_ptr<Note> note, std::string newTitle) {
+    for(auto it = collection.begin(); it != collection.end(); it++) {
+        if ((*it)->getTitle() == note->getTitle()) {
+            if((*it)->isBlocked())
+                throw std::runtime_error("Note is blocked");
+            else {
+                (*it)->setTitle(std::move(newTitle));
+                return;
+            }
+        }
     }
-    else
-        throw std::runtime_error("Note doesn't exist");
 }
 
-void NotesCollection::editNoteText(const std::string& noteTitle, std::string newText) {
-    auto it = collection.find(noteTitle);
-    if(it != collection.end()) {
-        if(!(it->second.isBlocked()))
-            it->second.setText(std::move(newText));
-        else
-            throw std::runtime_error("Note is blocked");
+void NotesCollection::editNoteText(std::shared_ptr<Note> note, std::string newText) {
+    for(auto it = collection.begin(); it != collection.end(); it++) {
+        if ((*it)->getTitle() == note->getTitle()) {
+            if((*it)->isBlocked())
+                throw std::runtime_error("Note is blocked");
+            else {
+                (*it)->setText(std::move(newText));
+                return;
+            }
+        }
     }
-    else
-        throw std::runtime_error("Note doesn't exist");
 }
 
 void NotesCollection::subscribe(Observer* o) {
@@ -99,28 +105,30 @@ void NotesCollection::notify() {
         (*it)->update();
 }
 
-void NotesCollection::block(const std::string& noteTitle) {
-    auto it = collection.find(noteTitle);
-    if(it != collection.end()) {
-        if (!(it->second.isBlocked()))
-            it->second.setBlocked(true);
-        else
-            throw std::runtime_error("Note is already blocked");
+void NotesCollection::block(std::shared_ptr<Note> note) {
+    for(auto it = collection.begin(); it != collection.end(); it++) {
+        if ((*it)->getTitle() == note->getTitle()) {
+            if((*it)->isBlocked())
+                throw std::runtime_error("Note is already blocked");
+            else {
+                (*it)->setBlocked(true);
+                return;
+            }
+        }
     }
-    else
-        throw std::runtime_error("Note doesn't exist");
 }
 
-void NotesCollection::unblock(const std::string& noteTitle) {
-    auto it = collection.find(noteTitle);
-    if(it != collection.end()) {
-        if (it->second.isBlocked())
-            it->second.setBlocked(false);
-        else
-            throw std::runtime_error("Note is already unblocked");
+void NotesCollection::unblock(std::shared_ptr<Note> note) {
+    for(auto it = collection.begin(); it != collection.end(); it++) {
+        if ((*it)->getTitle() == note->getTitle()) {
+            if(!(*it)->isBlocked())
+                throw std::runtime_error("Note is already unblocked");
+            else {
+                (*it)->setBlocked(false);
+                return;
+            }
+        }
     }
-    else
-        throw std::runtime_error("Note doesn't exist");
 }
 
 int NotesCollection::getNoteNumber() const {
