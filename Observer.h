@@ -15,8 +15,8 @@ class Observer {
 public:
     virtual ~Observer() = default;
     virtual void update() = 0;
-    virtual void attach(Subject* subject) = 0;
-    virtual void detach(Subject* subject) = 0;
+    virtual void attach(std::unique_ptr<Subject> subject) = 0;
+    virtual void detach(std::unique_ptr<Subject> subject) = 0;
 };
 
 #endif //NOTES_OBSERVER_H

@@ -14,10 +14,10 @@ class App : public Observer {
 public:
     ~App() override;
     void update() override;
-    void attach(Subject* subject) override;
-    void detach(Subject* subject) override;
+    void attach(std::unique_ptr<Subject> subject) override;
+    void detach(std::unique_ptr<Subject> subject) override;
 private:
-    std::map<std::string, Subject*> collections;
+    std::list<std::unique_ptr<Subject>> collections;
 };
 
 #endif //NOTES_APP_H
