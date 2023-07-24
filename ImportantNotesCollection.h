@@ -23,7 +23,7 @@ public:
     void printAllImportantNotes();
     void printOneImportantNotes(std::shared_ptr<Note> note);
     void blockImportantNotes(std::shared_ptr<Note> note);
-    void unblockImportantNotes(std::shared_ptr<Note> note);
+    void unblockImportantNotes(const std::shared_ptr<Note>& note);
     std::string getName() const;
     int getNoteNumber() const;
 
