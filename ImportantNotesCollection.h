@@ -6,7 +6,6 @@
 #define NOTES_IMPORTANTNOTESCOLLECTION_H
 
 #include <iostream>
-#include <map>
 #include <utility>
 #include <list>
 #include "Note.h"
@@ -16,13 +15,13 @@ class ImportantNotesCollection : public Subject {
 public:
     ImportantNotesCollection() : name("Important notes collection"), noteNumber(0) {}
     void addImportantNote(std::shared_ptr<Note> note);
-    void removeImportantNote(std::shared_ptr<Note> note);
-    void editImportantNoteTitle(std::shared_ptr<Note> note, std::string newTitle);
-    void editImportantNoteText(std::shared_ptr<Note> note, std::string newText);
+    void removeImportantNote(const std::shared_ptr<Note>& note);
+    void editImportantNoteTitle(const std::shared_ptr<Note>& note, std::string newTitle);
+    void editImportantNoteText(const std::shared_ptr<Note>& note, std::string newText);
     void printAllImportantNotesTitle();
     void printAllImportantNotes();
-    void printOneImportantNotes(std::shared_ptr<Note> note);
-    void blockImportantNotes(std::shared_ptr<Note> note);
+    void printOneImportantNotes(const std::shared_ptr<Note>& note);
+    void blockImportantNotes(const std::shared_ptr<Note>& note);
     void unblockImportantNotes(const std::shared_ptr<Note>& note);
     std::string getName() const;
     int getNoteNumber() const;

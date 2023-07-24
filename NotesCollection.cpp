@@ -6,8 +6,8 @@
 
 void NotesCollection::addNote(std::shared_ptr<Note> note) {
     bool found = false;
-    for(auto it = collection.begin(); it != collection.end(); it++) {
-        if ((*it)->getTitle() == note->getTitle())
+    for(auto & it : collection) {
+        if (it->getTitle() == note->getTitle())
             found = true;
     }
     if(!found) {
@@ -19,7 +19,7 @@ void NotesCollection::addNote(std::shared_ptr<Note> note) {
         throw std::runtime_error("Note already exists");
 }
 
-void NotesCollection::removeNote(std::shared_ptr<Note> note) {
+void NotesCollection::removeNote(const std::shared_ptr<Note>& note) {
     for(auto it = collection.begin(); it != collection.end(); it++) {
         if ((*it)->getTitle() == note->getTitle()) {
             if((*it)->isBlocked())
@@ -56,36 +56,36 @@ void NotesCollection::setName(std::string n) {
     name = std::move(n);
 }
 
-void NotesCollection::printOneNotes(std::shared_ptr<Note> note) {
-    for(auto it = collection.begin(); it != collection.end(); it++) {
-        if ((*it)->getTitle() == note->getTitle()) {
-            std::cout << "Title : " << (*it)->getTitle() << std::endl;
-            std::cout << "Text : " << (*it)->getText() << std::endl;
+void NotesCollection::printOneNotes(const std::shared_ptr<Note>& note) {
+    for(auto & it : collection) {
+        if (it->getTitle() == note->getTitle()) {
+            std::cout << "Title : " << it->getTitle() << std::endl;
+            std::cout << "Text : " << it->getText() << std::endl;
             return;
         }
     }
 }
 
-void NotesCollection::editNoteTitle(std::shared_ptr<Note> note, std::string newTitle) {
-    for(auto it = collection.begin(); it != collection.end(); it++) {
-        if ((*it)->getTitle() == note->getTitle()) {
-            if((*it)->isBlocked())
+void NotesCollection::editNoteTitle(const std::shared_ptr<Note>& note, std::string newTitle) {
+    for(auto & it : collection) {
+        if (it->getTitle() == note->getTitle()) {
+            if(it->isBlocked())
                 throw std::runtime_error("Note is blocked");
             else {
-                (*it)->setTitle(std::move(newTitle));
+                it->setTitle(std::move(newTitle));
                 return;
             }
         }
     }
 }
 
-void NotesCollection::editNoteText(std::shared_ptr<Note> note, std::string newText) {
-    for(auto it = collection.begin(); it != collection.end(); it++) {
-        if ((*it)->getTitle() == note->getTitle()) {
-            if((*it)->isBlocked())
+void NotesCollection::editNoteText(const std::shared_ptr<Note>& note, std::string newText) {
+    for(auto & it : collection) {
+        if (it->getTitle() == note->getTitle()) {
+            if(it->isBlocked())
                 throw std::runtime_error("Note is blocked");
             else {
-                (*it)->setText(std::move(newText));
+                it->setText(std::move(newText));
                 return;
             }
         }
@@ -101,30 +101,30 @@ void NotesCollection::unsubscribe(Observer* o) {
 }
 
 void NotesCollection::notify() {
-    for(auto it = observers.begin(); it != observers.end(); it++)
-        (*it)->update();
+    for(auto & observer : observers)
+        observer->update();
 }
 
-void NotesCollection::block(std::shared_ptr<Note> note) {
-    for(auto it = collection.begin(); it != collection.end(); it++) {
-        if ((*it)->getTitle() == note->getTitle()) {
-            if((*it)->isBlocked())
+void NotesCollection::block(const std::shared_ptr<Note>& note) {
+    for(auto & it : collection) {
+        if (it->getTitle() == note->getTitle()) {
+            if(it->isBlocked())
                 throw std::runtime_error("Note is already blocked");
             else {
-                (*it)->setBlocked(true);
+                it->setBlocked(true);
                 return;
             }
         }
     }
 }
 
-void NotesCollection::unblock(std::shared_ptr<Note> note) {
-    for(auto it = collection.begin(); it != collection.end(); it++) {
-        if ((*it)->getTitle() == note->getTitle()) {
-            if(!(*it)->isBlocked())
+void NotesCollection::unblock(const std::shared_ptr<Note>& note) {
+    for(auto & it : collection) {
+        if (it->getTitle() == note->getTitle()) {
+            if(!it->isBlocked())
                 throw std::runtime_error("Note is already unblocked");
             else {
-                (*it)->setBlocked(false);
+                it->setBlocked(false);
                 return;
             }
         }

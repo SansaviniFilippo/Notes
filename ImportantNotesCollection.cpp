@@ -6,8 +6,8 @@
 
 void ImportantNotesCollection::addImportantNote(std::shared_ptr<Note> note) {
     bool found = false;
-    for(auto it = collection.begin(); it != collection.end(); it++) {
-        if ((*it)->getTitle() == note->getTitle())
+    for(auto & it : collection) {
+        if (it->getTitle() == note->getTitle())
             found = true;
     }
     if(!found) {
@@ -19,7 +19,7 @@ void ImportantNotesCollection::addImportantNote(std::shared_ptr<Note> note) {
         throw std::runtime_error("Note already exists");
 }
 
-void ImportantNotesCollection::removeImportantNote(std::shared_ptr<Note> note) {
+void ImportantNotesCollection::removeImportantNote(const std::shared_ptr<Note>& note) {
     for(auto it = collection.begin(); it != collection.end(); it++) {
         if ((*it)->getTitle() == note->getTitle()) {
             if((*it)->isBlocked())
@@ -34,26 +34,26 @@ void ImportantNotesCollection::removeImportantNote(std::shared_ptr<Note> note) {
     }
 }
 
-void ImportantNotesCollection::editImportantNoteTitle(std::shared_ptr<Note> note, std::string newTitle) {
-    for(auto it = collection.begin(); it != collection.end(); it++) {
-        if ((*it)->getTitle() == note->getTitle()) {
-            if((*it)->isBlocked())
+void ImportantNotesCollection::editImportantNoteTitle(const std::shared_ptr<Note>& note, std::string newTitle) {
+    for(auto & it : collection) {
+        if (it->getTitle() == note->getTitle()) {
+            if(it->isBlocked())
                 throw std::runtime_error("Note is blocked");
             else {
-                (*it)->setTitle(std::move(newTitle));
+                it->setTitle(std::move(newTitle));
                 return;
             }
         }
     }
 }
 
-void ImportantNotesCollection::editImportantNoteText(std::shared_ptr<Note> note, std::string newText) {
-    for(auto it = collection.begin(); it != collection.end(); it++) {
-        if ((*it)->getTitle() == note->getTitle()) {
-            if((*it)->isBlocked())
+void ImportantNotesCollection::editImportantNoteText(const std::shared_ptr<Note>& note, std::string newText) {
+    for(auto & it : collection) {
+        if (it->getTitle() == note->getTitle()) {
+            if(it->isBlocked())
                 throw std::runtime_error("Note is blocked");
             else {
-                (*it)->setText(std::move(newText));
+                it->setText(std::move(newText));
                 return;
             }
         }
@@ -62,36 +62,36 @@ void ImportantNotesCollection::editImportantNoteText(std::shared_ptr<Note> note,
 
 void ImportantNotesCollection::printAllImportantNotesTitle() {
     std::cout << "Important notes in " << name << ":" << std::endl;
-    for(auto it = collection.begin(); it != collection.end(); it++)
-        std::cout << (*it)->getTitle() << std::endl;
+    for(auto & it : collection)
+        std::cout << it->getTitle() << std::endl;
 }
 
 void ImportantNotesCollection::printAllImportantNotes() {
     std::cout << "Titles and texts of important notes in " << name << ":" << std::endl;
-    for(auto it = collection.begin(); it != collection.end(); it++) {
-        std::cout << "Title : " << (*it)->getTitle() << std::endl;
-        std::cout << "Text : " << (*it)->getText() << std::endl;
+    for(auto & it : collection) {
+        std::cout << "Title : " << it->getTitle() << std::endl;
+        std::cout << "Text : " << it->getText() << std::endl;
     }
 }
 
-void ImportantNotesCollection::printOneImportantNotes(std::shared_ptr<Note> note) {
-    for(auto it = collection.begin(); it != collection.end(); it++) {
-        if ((*it)->getTitle() == note->getTitle()) {
-            std::cout << "Title : " << (*it)->getTitle() << std::endl;
-            std::cout << "Text : " << (*it)->getText() << std::endl;
+void ImportantNotesCollection::printOneImportantNotes(const std::shared_ptr<Note>& note) {
+    for(auto & it : collection) {
+        if (it->getTitle() == note->getTitle()) {
+            std::cout << "Title : " << it->getTitle() << std::endl;
+            std::cout << "Text : " << it->getText() << std::endl;
             return;
         }
     }
     throw std::runtime_error("Note not found");
 }
 
-void ImportantNotesCollection::blockImportantNotes(std::shared_ptr<Note> note) {
-    for(auto it = collection.begin(); it != collection.end(); it++) {
-        if ((*it)->getTitle() == note->getTitle()) {
-            if((*it)->isBlocked())
+void ImportantNotesCollection::blockImportantNotes(const std::shared_ptr<Note>& note) {
+    for(auto & it : collection) {
+        if (it->getTitle() == note->getTitle()) {
+            if(it->isBlocked())
                 throw std::runtime_error("Note is already blocked");
             else {
-                (*it)->setBlocked(true);
+                it->setBlocked(true);
                 return;
             }
         }
