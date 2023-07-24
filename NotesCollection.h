@@ -5,7 +5,6 @@
 #ifndef NOTES_NOTESCOLLECTION_H
 #define NOTES_NOTESCOLLECTION_H
 
-
 #include <iostream>
 #include <utility>
 #include <list>

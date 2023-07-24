@@ -7,17 +7,16 @@
 
 #include "Observer.h"
 #include "NotesCollection.h"
-#include <memory>
-#include <map>
+#include "ImportantNotesCollection.h"
 
 class App : public Observer {
 public:
-    ~App() override;
+    ~App() override = default;
     void update() override;
-    void attach(std::unique_ptr<Subject> subject) override;
-    void detach(std::unique_ptr<Subject> subject) override;
+    void attach(Subject* subject) override;
+    void detach(Subject* subject) override;
 private:
-    std::list<std::unique_ptr<Subject>> collections;
+    std::list<Subject*> collections;
 };
 
 #endif //NOTES_APP_H
