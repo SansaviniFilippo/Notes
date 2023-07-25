@@ -6,14 +6,13 @@
 #define NOTES_IMPORTANTNOTESCOLLECTION_H
 
 #include <iostream>
-#include <utility>
 #include <list>
 #include "Note.h"
 #include "Subject.h"
 
 class ImportantNotesCollection : public Subject {
 public:
-    explicit ImportantNotesCollection(std::string n) : name(std::move(n)), noteNumber(0) {}
+    explicit ImportantNotesCollection(std::string n = "Important Notes Collection") : name(std::move(n)), noteNumber(0) {}
     void addImportantNote(std::shared_ptr<Note> note);
     void removeImportantNote(const std::shared_ptr<Note>& note);
     void editImportantNoteTitle(const std::shared_ptr<Note>& note, std::string newTitle);
