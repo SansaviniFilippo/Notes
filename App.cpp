@@ -2,7 +2,6 @@
 // Created by filippo on 21/07/23.
 //
 
-#include <algorithm>
 #include "App.h"
 
 void App::update() {
