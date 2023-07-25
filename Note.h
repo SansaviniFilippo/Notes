@@ -6,7 +6,6 @@
 #define NOTES_NOTE_H
 
 #include <iostream>
-#include <utility>
 
 class Note {
 public:

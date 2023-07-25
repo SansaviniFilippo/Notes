@@ -4,8 +4,6 @@
 
 #include "Note.h"
 
-#include <utility>
-
 std::string Note::getTitle() const {
     return title;
 }
