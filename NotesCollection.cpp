@@ -36,15 +36,15 @@ void NotesCollection::removeNote(const std::shared_ptr<Note>& note) {
 
 void NotesCollection::printAllNotesTitle() {
     std::cout << "Notes in " << name << ":" << std::endl;
-    for(auto it = collection.begin(); it != collection.end(); it++)
-        std::cout << (*it)->getTitle() << std::endl;
+    for(auto & it : collection)
+        std::cout << it->getTitle() << std::endl;
 }
 
 void NotesCollection::printAllNotes() {
     std::cout << "Titles and texts of notes in " << name << ":" << std::endl;
-    for(auto it = collection.begin(); it != collection.end(); it++) {
-        std::cout << "Title : " << (*it)->getTitle() << std::endl;
-        std::cout << "Text : " << (*it)->getText() << std::endl;
+    for(auto & it : collection) {
+        std::cout << "Title : " << it->getTitle() << std::endl;
+        std::cout << "Text : " << it->getText() << std::endl;
     }
 }
 

@@ -6,7 +6,6 @@
 #define NOTES_NOTESCOLLECTION_H
 
 #include <iostream>
-#include <utility>
 #include <list>
 #include "Note.h"
 #include "Subject.h"
