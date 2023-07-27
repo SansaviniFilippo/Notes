@@ -4,6 +4,12 @@
 
 #include "ImportantNotesCollection.h"
 
+#include <utility>
+
+void ImportantNotesCollection::setName(std::string n) {
+    name = std::move(n);
+}
+
 void ImportantNotesCollection::addImportantNote(std::shared_ptr<Note> note) {
     bool found = false;
     for(auto & it : collection) {

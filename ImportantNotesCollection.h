@@ -23,6 +23,7 @@ public:
     void blockImportantNotes(const std::shared_ptr<Note>& note);
     void unblockImportantNotes(const std::shared_ptr<Note>& note);
     std::string getName() const;
+    void setName(std::string n);
     int getNoteNumber() const;
 
     ~ImportantNotesCollection() override = default;
