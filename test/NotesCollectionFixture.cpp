@@ -54,3 +54,9 @@ TEST_F(NotesCollectionTest, BlockedTest) {
     collection->unblock(note1);
     EXPECT_FALSE(note1->isBlocked());
 }
+
+TEST_F(NotesCollectionTest, GetterAndSetterTest) {
+    EXPECT_EQ(collection->getName(), "My Collection");
+    collection->setName("New My Collection");
+    EXPECT_EQ(collection->getName(), "New My Collection");
+}
