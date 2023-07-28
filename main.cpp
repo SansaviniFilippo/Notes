@@ -1,6 +1,4 @@
-#include <iostream>
-#include <map>
-#include <string>
+#include <memory>
 #include "Note.h"
 #include "NotesCollection.h"
 #include "ImportantNotesCollection.h"
@@ -8,79 +6,54 @@
 
 int main() {
 
-    std::cout << "Welcome!" << std::endl;
+    NotesCollection c1("Notes Collection 1");
+    NotesCollection c2("Notes Collection 2");
+    ImportantNotesCollection importantNotesCollection("Important Notes Collection");
 
-    bool createCollections = true;
-    std::map<std::string, NotesCollection> collections;
-    ImportantNotesCollection importantNotesCollection;
     App app;
+    app.attach(&c1);
+    app.attach(&c2);
+    app.attach(&importantNotesCollection);
 
-    while(createCollections) {
-        std::cout << "Enter 1 to create a new regular notes collection, 2 to create a new important notes collection, or 3 to exit : " << std::endl;
-        int result;
-        std::cin >> result;
+    std::shared_ptr<Note> n1 = std::make_shared<Note>("title 1", "text 1");
+    std::shared_ptr<Note> n2 = std::make_shared<Note>("title 2", "text 2");
+    std::shared_ptr<Note> n3 = std::make_shared<Note>("title 3", "text 3");
 
-        switch (result) {
-            case 1: {
-                std::string collectionName;
-                std::cout << "Enter the name : " << std::endl;
-                std::cin >> collectionName;
+    c1.addNote(n1);
+    c1.addNote(n2);
+    c2.addNote(n3);
+    importantNotesCollection.addImportantNote(n1);
 
-                NotesCollection collectionOne(collectionName);
-                collections.insert(std::make_pair(collectionName, collectionOne));
-                app.attach(&collectionOne);
+    c1.printAllNotes();
+    c2.printAllNotes();
+    importantNotesCollection.printAllImportantNotes();
 
-                std::cout << "Regular notes collection '" << collectionName << "' created successfully!" << std::endl;
-                break;
-            }
+    c1.editNoteTitle(n1, "title 1 new");
 
-            case 2: {
-                if(importantNotesCollection.getName().empty()) {
-                    std::string collectionName;
-                    std::cout << "Enter the name of the important notes collection : " << std::endl;
-                    std::cin >> collectionName;
+    c1.printAllNotes();
+    c2.printAllNotes();
+    importantNotesCollection.printAllImportantNotes();
 
-                    importantNotesCollection.setName(collectionName);
-                    app.attach(&importantNotesCollection);
-                }
-                else {
-                    std::cout << "The important notes collection already exist." << std::endl;
-                }
-                break;
-            }
+    c1.editNoteText(n1, "text 1 new");
 
-            case 3: {
-                createCollections = false;
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-    }
+    c1.printAllNotes();
+    c2.printAllNotes();
+    importantNotesCollection.printAllImportantNotes();
 
-    bool performOperations = true;
+    c1.removeNote(n1);
+    c2.addNote(n1);
+    importantNotesCollection.addImportantNote(n2);
+    importantNotesCollection.removeImportantNote(n1);
 
-    while(performOperations) {
-        std::cout << "Enter 1 to add a new note, 2 to remove a note, 3 to edit a note, 4 to block a note, 5 to unblock a note, 6 to exit : " << std::endl;
-        int operationresult;
-        std::cin >> operationresult;
+    c1.printAllNotes();
+    c2.printAllNotes();
+    importantNotesCollection.printAllImportantNotes();
 
-        switch(operationresult) {
-            case 1: {
-                std::string collectionName, noteTitle, noteText;
-                bool isImportant;
+    app.detach(&c1);
+    app.detach(&c2);
+    app.detach(&importantNotesCollection);
 
-                std::cout << "Enter the collection name where you want to add the note : " << std::endl;
-                std::cin >> collectionName;
+    app.update();
 
-                auto it = collections.find(collectionName);
-            }
-
-            default: {
-                break;
-            }
-        }
-    }
     return 0;
 }
