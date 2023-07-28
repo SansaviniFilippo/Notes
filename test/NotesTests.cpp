@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 #include "../Note.h"
 
-TEST(NotesFixture, GetterAndSetterTest) {
+TEST(NotesTests, GetterAndSetterTest) {
     Note note("Title", "Text", false);
     EXPECT_EQ(note.getTitle(), "Title");
     EXPECT_EQ(note.getText(), "Text");
@@ -19,7 +19,7 @@ TEST(NotesFixture, GetterAndSetterTest) {
     EXPECT_TRUE(note.isBlocked());
 }
 
-TEST(NotesFixture, EmptyInitializationTest) {
+TEST(NotesTests, EmptyInitializationTest) {
     Note note("","");
     EXPECT_EQ(note.getTitle(), "");
     EXPECT_EQ(note.getText(), "");
