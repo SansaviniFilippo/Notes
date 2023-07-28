@@ -10,25 +10,31 @@ class ImportantNotesCollectionTest : public ::testing::Test {
 protected:
     void SetUp() override {
         collection = std::make_shared<ImportantNotesCollection>("My Important Collection");
+        note1 = std::make_shared<Note>("Important Note 1", "Important Text 1");
+        note2 = std::make_shared<Note>("Important Note 2", "Important Text 2");
+        note3 = std::make_shared<Note>("Important Note 3", "Important Text 3");
     }
     void TearDown() override {
         collection.reset();
+        note1.reset();
+        note2.reset();
     }
     std::shared_ptr<ImportantNotesCollection> collection;
+    std::shared_ptr<Note> note1;
+    std::shared_ptr<Note> note2;
+    std::shared_ptr<Note> note3;
 };
 
 
 TEST_F(ImportantNotesCollectionTest, AddNoteTest) {
-    collection->addImportantNote(std::make_shared<Note>("Important Note 1", "Important Text"));
+    collection->addImportantNote(note1);
     EXPECT_EQ(collection->getNoteNumber(), 1);
-    collection->addImportantNote(std::make_shared<Note>("Important Note 2", "Important Text"));
-    collection->addImportantNote(std::make_shared<Note>("Important Note 3", "Important Text"));
+    collection->addImportantNote(note2);
+    collection->addImportantNote(note3);
     EXPECT_EQ(collection->getNoteNumber(), 3);
 }
 
 TEST_F(ImportantNotesCollectionTest, RemoveNoteTest) {
-    auto note1 = std::make_shared<Note>("Imp Note 1", "Imp Text 1");
-    auto note2 = std::make_shared<Note>("Imp Note 2", "Imp Text 2");
     collection->addImportantNote(note1);
     collection->addImportantNote(note2);
     collection->printOneImportantNotes(note1);
@@ -40,7 +46,6 @@ TEST_F(ImportantNotesCollectionTest, RemoveNoteTest) {
 }
 
 TEST_F(ImportantNotesCollectionTest, UpdateTest) {
-    auto note1 = std::make_shared<Note>("Note 1", "Text 1");
     collection->addImportantNote(note1);
     collection->editImportantNoteTitle(note1, "New Note 1");
     EXPECT_EQ(note1->getTitle(), "New Note 1");
@@ -49,7 +54,7 @@ TEST_F(ImportantNotesCollectionTest, UpdateTest) {
 }
 
 TEST_F(ImportantNotesCollectionTest, BlockedTest) {
-    auto note1 = std::make_shared<Note>("Note 1", "Text 1", false);
+    auto note4 = std::make_shared<Note>("Note 4", "Text 4", false);
     collection->addImportantNote(note1);
     EXPECT_FALSE(note1->isBlocked());
     collection->blockImportantNotes(note1);
