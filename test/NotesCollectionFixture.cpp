@@ -9,23 +9,27 @@
 class NotesCollectionTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        collection = std::make_shared<NotesCollection>("My Collection");
+        collection = std::make_unique<NotesCollection>("My Collection");
+        note1 = std::make_shared<Note>("Note 1", "Text 1");
+        note2 = std::make_shared<Note>("Note 2", "Text 2");
     }
     void TearDown() override {
         collection.reset();
+        note1.reset();
+        note2.reset();
     }
-    std::shared_ptr<NotesCollection> collection;
+    std::unique_ptr<NotesCollection> collection;
+    std::shared_ptr<Note> note1;
+    std::shared_ptr<Note> note2;
 };
 
 TEST_F(NotesCollectionTest, AddNoteTest) {
-    collection->addNote(std::make_shared<Note>("Note 1", "Text 1"));
-    collection->addNote(std::make_shared<Note>("Note 2", "Text 2"));
+    collection->addNote(note1);
+    collection->addNote(note2);
     EXPECT_EQ(collection->getNoteNumber(), 2);
 }
 
 TEST_F(NotesCollectionTest, PrintAndRemoveTest) {
-    auto note1 = std::make_shared<Note>("Note 1", "Text 1");
-    auto note2 = std::make_shared<Note>("Note 2", "Text 2");
     collection->addNote(note1);
     collection->addNote(note2);
     collection->printOneNotes(note1);
@@ -37,7 +41,6 @@ TEST_F(NotesCollectionTest, PrintAndRemoveTest) {
 }
 
 TEST_F(NotesCollectionTest, UpdateTest) {
-    auto note1 = std::make_shared<Note>("Note 1", "Text 1");
     collection->addNote(note1);
     collection->editNoteTitle(note1, "New Note 1");
     EXPECT_EQ(note1->getTitle(), "New Note 1");
@@ -46,13 +49,13 @@ TEST_F(NotesCollectionTest, UpdateTest) {
 }
 
 TEST_F(NotesCollectionTest, BlockedTest) {
-    auto note1 = std::make_shared<Note>("Note 1", "Text 1", false);
-    collection->addNote(note1);
-    EXPECT_FALSE(note1->isBlocked());
-    collection->block(note1);
-    EXPECT_TRUE(note1->isBlocked());
-    collection->unblock(note1);
-    EXPECT_FALSE(note1->isBlocked());
+    auto note3 = std::make_shared<Note>("Note 3", "Text 3", false);
+    collection->addNote(note3);
+    EXPECT_FALSE(note3->isBlocked());
+    collection->block(note3);
+    EXPECT_TRUE(note3->isBlocked());
+    collection->unblock(note3);
+    EXPECT_FALSE(note3->isBlocked());
 }
 
 TEST_F(NotesCollectionTest, GetterAndSetterTest) {
