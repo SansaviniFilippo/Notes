@@ -32,12 +32,33 @@ TEST_F(NotesCollectionTest, AddNoteTest) {
 TEST_F(NotesCollectionTest, PrintAndRemoveTest) {
     collection->addNote(note1);
     collection->addNote(note2);
+
+    ::testing::internal::CaptureStdout();
     collection->printOneNotes(note1);
+    std::string output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Title : Note 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Text : Text 1") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
     collection->printAllNotes();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Title : Note 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Text : Text 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Title : Note 2") != std::string::npos);
+    EXPECT_TRUE(output.find("Text : Text 2") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
     collection->printAllNotesTitle();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Note 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Note 2") != std::string::npos);
+
     collection->removeNote(note1);
     EXPECT_EQ(collection->getNoteNumber(), 1);
+    ::testing::internal::CaptureStdout();
     collection->printAllNotesTitle();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Note 2") != std::string::npos);
 }
 
 TEST_F(NotesCollectionTest, UpdateTest) {
