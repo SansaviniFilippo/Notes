@@ -26,9 +26,15 @@ void App::update() {
 void App::attach(Subject* subject) {
     collections.push_back(subject);
     collections.back()->subscribe(this);
+    collectionsNumber++;
 }
 
 void App::detach(Subject* subject) {
     collections.back()->unsubscribe(this);
     collections.remove(subject);
+    collectionsNumber--;
+}
+
+int App::getCollectionsNumber() const {
+    return collectionsNumber;
 }
