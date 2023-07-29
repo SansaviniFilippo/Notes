@@ -25,7 +25,6 @@ protected:
     std::shared_ptr<Note> note3;
 };
 
-
 TEST_F(ImportantNotesCollectionTest, AddNoteTest) {
     collection->addImportantNote(note1);
     EXPECT_EQ(collection->getNoteNumber(), 1);
@@ -34,15 +33,36 @@ TEST_F(ImportantNotesCollectionTest, AddNoteTest) {
     EXPECT_EQ(collection->getNoteNumber(), 3);
 }
 
-TEST_F(ImportantNotesCollectionTest, RemoveNoteTest) {
+TEST_F(ImportantNotesCollectionTest, PrintAndRemoveNoteTest) {
     collection->addImportantNote(note1);
     collection->addImportantNote(note2);
+
+    ::testing::internal::CaptureStdout();
     collection->printOneImportantNotes(note1);
+    std::string output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Title : Important Note 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Text : Important Text 1") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
     collection->printAllImportantNotes();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Title : Important Note 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Text : Important Text 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Title : Important Note 2") != std::string::npos);
+    EXPECT_TRUE(output.find("Text : Important Text 2") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
     collection->printAllImportantNotesTitle();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Important Note 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Important Note 2") != std::string::npos);
+
     collection->removeImportantNote(note1);
     EXPECT_EQ(collection->getNoteNumber(), 1);
+    ::testing::internal::CaptureStdout();
     collection->printAllImportantNotesTitle();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Important Note 2") != std::string::npos);
 }
 
 TEST_F(ImportantNotesCollectionTest, UpdateTest) {
