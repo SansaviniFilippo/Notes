@@ -45,10 +45,14 @@ int main() {
     importantNotesCollection.addImportantNote(n2);
     importantNotesCollection.removeImportantNote(n1);
 
+    std::cout << "----------------------------------------------------------" << std::endl;
     c1.printAllNotes();
     c2.printAllNotes();
     importantNotesCollection.printAllImportantNotes();
-
+    std::cout << "----------------------------------------------------------" << std::endl;
+    c1.printAllRemovedNotesTitle();
+    c2.printAllRemovedNotesTitle();
+    std::cout << "----------------------------------------------------------" << std::endl;
     app.detach(&c1);
     app.detach(&c2);
     app.detach(&importantNotesCollection);

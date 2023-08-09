@@ -11,6 +11,10 @@ void NotesCollection::addNote(std::shared_ptr<Note> note) {
             found = true;
     }
     if(!found) {
+        for(auto & it : removedNotesCollection) {
+            if (it->getTitle() == note->getTitle())
+                removeRemovedNote(note);
+        }
         collection.push_back(std::move(note));
         noteNumber++;
         notify();
@@ -25,6 +29,7 @@ void NotesCollection::removeNote(const std::shared_ptr<Note>& note) {
             if((*it)->isBlocked())
                 throw std::runtime_error("Note is blocked");
             else {
+                addRemovedNote(note);
                 collection.erase(it);
                 noteNumber--;
                 notify();
@@ -133,4 +138,37 @@ void NotesCollection::unblock(const std::shared_ptr<Note>& note) {
 
 int NotesCollection::getNoteNumber() const {
     return noteNumber;
+}
+
+void NotesCollection::printAllRemovedNotesTitle() {
+    std::cout << "Removed Notes in " << name << "'s bin:" << std::endl;
+    for(auto & it : removedNotesCollection)
+        std::cout << it->getTitle() << std::endl;
+}
+
+void NotesCollection::printAllRemovedNotes() {
+    std::cout << "Titles and texts of removed notes in " << name << "'s bin:" << std::endl;
+    for(auto & it : removedNotesCollection) {
+        std::cout << "Title : " << it->getTitle() << std::endl;
+        std::cout << "Text : " << it->getText() << std::endl;
+    }
+}
+
+void NotesCollection::addRemovedNote(std::shared_ptr<Note> note) {
+    bool found = false;
+    for(auto & it : removedNotesCollection) {
+        if (it->getTitle() == note->getTitle())
+            found = true;
+    }
+    if(!found)
+        removedNotesCollection.push_back(std::move(note));
+}
+
+void NotesCollection::removeRemovedNote(const std::shared_ptr<Note>& note) {
+    for(auto it = removedNotesCollection.begin(); it != removedNotesCollection.end(); it++) {
+        if ((*it)->getTitle() == note->getTitle()) {
+            removedNotesCollection.erase(it);
+            return;
+        }
+    }
 }

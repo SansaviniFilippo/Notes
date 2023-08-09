@@ -22,6 +22,8 @@ public:
     void printOneNotes(const std::shared_ptr<Note>& note);
     void block(const std::shared_ptr<Note>& note);
     void unblock(const std::shared_ptr<Note>& note);
+    void printAllRemovedNotesTitle();
+    void printAllRemovedNotes();
     std::string getName() const;
     void setName(std::string n);
     int getNoteNumber() const;
@@ -33,8 +35,12 @@ public:
 private:
     std::string name;
     std::list<std::shared_ptr<Note>> collection;
+    std::list<std::shared_ptr<Note>> removedNotesCollection;
     std::list<Observer*> observers;
     int noteNumber;
+
+    void addRemovedNote(std::shared_ptr<Note> note);
+    void removeRemovedNote(const std::shared_ptr<Note>& note);
 };
 
 #endif //NOTES_NOTESCOLLECTION_H
