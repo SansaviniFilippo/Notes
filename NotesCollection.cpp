@@ -176,3 +176,11 @@ void NotesCollection::removeRemovedNote(const std::shared_ptr<Note>& note) {
 void NotesCollection::emptyTheBin() {
     removedNotesCollection.clear();
 }
+
+void NotesCollection::clearCollection() {
+    for(auto & it : collection)
+        addRemovedNote(it);
+    collection.clear();
+    noteNumber = 0;
+    notify();
+}

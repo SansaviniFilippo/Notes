@@ -177,3 +177,11 @@ void ImportantNotesCollection::removeRemovedImportantNotes(const std::shared_ptr
 void ImportantNotesCollection::emptyTheBinImportantNotes() {
     removedNotesCollection.clear();
 }
+
+void ImportantNotesCollection::clearCollection() {
+    for(auto & it : collection)
+        addRemovedImportantNotes(it);
+    collection.clear();
+    noteNumber = 0;
+    notify();
+}

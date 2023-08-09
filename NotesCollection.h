@@ -15,6 +15,7 @@ public:
     explicit NotesCollection(std::string n) : name(std::move(n)), noteNumber(0) {}
     void addNote(std::shared_ptr<Note> note);
     void removeNote(const std::shared_ptr<Note>& note);
+    void clearCollection();
     void editNoteTitle(const std::shared_ptr<Note>& note, std::string newTitle);
     void editNoteText(const std::shared_ptr<Note>& note, std::string newText);
     void printAllNotesTitle();

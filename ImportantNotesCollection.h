@@ -15,6 +15,7 @@ public:
     explicit ImportantNotesCollection(std::string n = "Important Notes Collection") : name(std::move(n)), noteNumber(0) {}
     void addImportantNote(std::shared_ptr<Note> note);
     void removeImportantNote(const std::shared_ptr<Note>& note);
+    void clearCollection();
     void editImportantNoteTitle(const std::shared_ptr<Note>& note, std::string newTitle);
     void editImportantNoteText(const std::shared_ptr<Note>& note, std::string newText);
     void printAllImportantNotesTitle();
