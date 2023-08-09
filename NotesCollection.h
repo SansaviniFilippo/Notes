@@ -26,8 +26,8 @@ public:
     void printAllRemovedNotesTitle();
     void printAllRemovedNotes();
     void emptyTheBin();
-    void copyAndPaste(const std::shared_ptr<Note>& note, NotesCollection& nC1, NotesCollection& nC2);
-    void cutAndPaste(const std::shared_ptr<Note>& note, NotesCollection& nC1, NotesCollection& nC2);
+    void copyAndPaste(const std::shared_ptr<Note>& note, NotesCollection &copyiedCollection, NotesCollection &pastedCollection);
+    void cutAndPaste(const std::shared_ptr<Note>& note, NotesCollection &cutCollection, NotesCollection &pastedCollection);
     std::string getName() const;
     void setName(std::string n);
     int getNoteNumber() const;
