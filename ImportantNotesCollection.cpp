@@ -139,3 +139,37 @@ void ImportantNotesCollection::notify() {
     for(auto & observer : observers)
         observer->update();
 }
+
+void ImportantNotesCollection::printAllRemovedImportantNotesTitle() {
+    std::cout << "Removed important notes in " << name << "'s bin:" << std::endl;
+    for(auto & it : removedNotesCollection)
+        std::cout << it->getTitle() << std::endl;
+}
+
+void ImportantNotesCollection::printAllRemovedImportantNotes() {
+    std::cout << "Titles and texts of removed important notes in " << name << "'s bin:" << std::endl;
+    for(auto & it : removedNotesCollection) {
+        std::cout << "Title : " << it->getTitle() << std::endl;
+        std::cout << "Text : " << it->getText() << std::endl;
+    }
+}
+
+void ImportantNotesCollection::addRemovedImportantNotes(std::shared_ptr<Note> note) {
+    bool found = false;
+    for(auto & it : removedNotesCollection) {
+        if (it->getTitle() == note->getTitle())
+            found = true;
+    }
+    if(!found) {
+        removedNotesCollection.push_back(std::move(note));
+    }
+}
+
+void ImportantNotesCollection::removeRemovedImportantNotes(const std::shared_ptr<Note>& note) {
+    for(auto it = removedNotesCollection.begin(); it != removedNotesCollection.end(); it++) {
+        if ((*it)->getTitle() == note->getTitle()) {
+            removedNotesCollection.erase(it);
+            return;
+        }
+    }
+}
