@@ -52,6 +52,7 @@ int main() {
     std::cout << "----------------------------------------------------------" << std::endl;
     c1.printAllRemovedNotesTitle();
     c2.printAllRemovedNotesTitle();
+    importantNotesCollection.printAllRemovedImportantNotes();
     std::cout << "----------------------------------------------------------" << std::endl;
     app.detach(&c1);
     app.detach(&c2);
