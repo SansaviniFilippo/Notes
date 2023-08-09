@@ -184,3 +184,50 @@ void NotesCollection::clearCollection() {
     noteNumber = 0;
     notify();
 }
+
+void NotesCollection::copyAndPaste(const std::shared_ptr<Note> &note, NotesCollection &copyiedCollection, NotesCollection &pastedCollection) {
+    bool found = false;
+    for(auto & it : copyiedCollection.collection) {
+        if (it->getTitle() == note->getTitle())
+            found = true;
+    }
+    if(!found)
+        throw std::runtime_error("Note doesn't exist");
+    else {
+        found = false;
+        for(auto & it : pastedCollection.collection) {
+            if (it->getTitle() == note->getTitle())
+                found = true;
+        }
+        if(found)
+            throw std::runtime_error("Note already exists in the collection you want to move it");
+        else {
+            std::shared_ptr<Note> newNote = std::make_shared<Note>(note->getTitle(), note->getText());
+            pastedCollection.addNote(newNote);
+        }
+    }
+}
+
+void NotesCollection::cutAndPaste(const std::shared_ptr<Note> &note, NotesCollection &cutCollection, NotesCollection &pastedCollection) {
+    bool found = false;
+    for(auto & it : cutCollection.collection) {
+        if (it->getTitle() == note->getTitle())
+            found = true;
+    }
+    if(!found)
+        throw std::runtime_error("Note doesn't exist");
+    else {
+        found = false;
+        for(auto & it : pastedCollection.collection) {
+            if (it->getTitle() == note->getTitle())
+                found = true;
+        }
+        if(found)
+            throw std::runtime_error("Note already exists in the collection you want to move it");
+        else {
+            std::shared_ptr<Note> newNote = std::make_shared<Note>(note->getTitle(), note->getText());
+            pastedCollection.addNote(newNote);
+            cutCollection.removeNote(note);
+        }
+    }
+}
