@@ -24,6 +24,7 @@ public:
     void unblock(const std::shared_ptr<Note>& note);
     void printAllRemovedNotesTitle();
     void printAllRemovedNotes();
+    void emptyTheBin();
     std::string getName() const;
     void setName(std::string n);
     int getNoteNumber() const;

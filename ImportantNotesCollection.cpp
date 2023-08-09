@@ -173,3 +173,7 @@ void ImportantNotesCollection::removeRemovedImportantNotes(const std::shared_ptr
         }
     }
 }
+
+void ImportantNotesCollection::emptyTheBinImportantNotes() {
+    removedNotesCollection.clear();
+}

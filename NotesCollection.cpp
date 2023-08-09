@@ -172,3 +172,7 @@ void NotesCollection::removeRemovedNote(const std::shared_ptr<Note>& note) {
         }
     }
 }
+
+void NotesCollection::emptyTheBin() {
+    removedNotesCollection.clear();
+}
