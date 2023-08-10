@@ -12,7 +12,7 @@
 
 class ImportantNotesCollection : public Subject {
 public:
-    explicit ImportantNotesCollection(std::string n = "Important Notes Collection") : name(std::move(n)), noteNumber(0) {}
+    explicit ImportantNotesCollection(std::string n = "Important Notes Collection") : name(std::move(n)), noteNumber(0), removedNoteNumber(0) {}
     void addImportantNote(std::shared_ptr<Note> note);
     void removeImportantNote(const std::shared_ptr<Note>& note);
     void clearCollection();
@@ -29,6 +29,7 @@ public:
     std::string getName() const;
     void setName(std::string n);
     int getNoteNumber() const;
+    int getRemovedNoteNumber() const;
 
     ~ImportantNotesCollection() override = default;
     void subscribe(Observer* o) override;
@@ -39,7 +40,7 @@ private:
     std::list<std::shared_ptr<Note>> collection;
     std::list<std::shared_ptr<Note>> removedNotesCollection;
     std::list<Observer*> observers;
-    int noteNumber;
+    int noteNumber, removedNoteNumber;
 
     void addRemovedImportantNotes(std::shared_ptr<Note> note);
     void removeRemovedImportantNotes(const std::shared_ptr<Note>& note);

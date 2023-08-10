@@ -17,6 +17,12 @@ void ImportantNotesCollection::addImportantNote(std::shared_ptr<Note> note) {
             found = true;
     }
     if(!found) {
+        for(auto & it : removedNotesCollection) {
+            if (it->getTitle() == note->getTitle()) {
+                removeRemovedImportantNotes(note);
+                return;
+            }
+        }
         collection.push_back(std::move(note));
         noteNumber++;
         notify();
@@ -31,6 +37,7 @@ void ImportantNotesCollection::removeImportantNote(const std::shared_ptr<Note>& 
             if((*it)->isBlocked())
                 throw std::runtime_error("Note is blocked");
             else {
+                addRemovedImportantNotes(note);
                 collection.erase(it);
                 noteNumber--;
                 notify();
@@ -162,6 +169,7 @@ void ImportantNotesCollection::addRemovedImportantNotes(std::shared_ptr<Note> no
     }
     if(!found) {
         removedNotesCollection.push_back(std::move(note));
+        removedNoteNumber++;
     }
 }
 
@@ -169,6 +177,7 @@ void ImportantNotesCollection::removeRemovedImportantNotes(const std::shared_ptr
     for(auto it = removedNotesCollection.begin(); it != removedNotesCollection.end(); it++) {
         if ((*it)->getTitle() == note->getTitle()) {
             removedNotesCollection.erase(it);
+            removedNoteNumber--;
             return;
         }
     }
@@ -176,6 +185,7 @@ void ImportantNotesCollection::removeRemovedImportantNotes(const std::shared_ptr
 
 void ImportantNotesCollection::emptyTheBinImportantNotes() {
     removedNotesCollection.clear();
+    removedNoteNumber = 0;
 }
 
 void ImportantNotesCollection::clearCollection() {
@@ -184,4 +194,8 @@ void ImportantNotesCollection::clearCollection() {
     collection.clear();
     noteNumber = 0;
     notify();
+}
+
+int ImportantNotesCollection::getRemovedNoteNumber() const {
+    return removedNoteNumber;
 }
