@@ -86,3 +86,46 @@ TEST_F(ImportantNotesCollectionTest, BlockedTest) {
 TEST_F(ImportantNotesCollectionTest, GetterTest) {
     EXPECT_EQ(collection->getName(), "My Important Collection");
 }
+
+
+TEST_F(ImportantNotesCollectionTest, removedImportantNotesTest) {
+    collection->addImportantNote(note1);
+    collection->removeImportantNote(note1);
+    EXPECT_EQ(collection->getNoteNumber(), 0);
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 1);
+
+    ::testing::internal::CaptureStdout();
+    collection->printAllRemovedImportantNotesTitle();
+    std::string output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Important Note 1") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
+    collection->printAllRemovedImportantNotes();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Important Note 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Important Text 1") != std::string::npos);
+
+    collection->addImportantNote(note1);
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 0);
+ }
+
+TEST_F(ImportantNotesCollectionTest, emptyTheBinTest) {
+    collection->addImportantNote(note1);
+    collection->addImportantNote(note2);
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 0);
+    collection->removeImportantNote(note1);
+    collection->removeImportantNote(note2);
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 2);
+    collection->emptyTheBinImportantNotes();
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 0);
+}
+
+TEST_F(ImportantNotesCollectionTest, ClearCollectionTest) {
+    collection->addImportantNote(note1);
+    collection->addImportantNote(note2);
+    EXPECT_EQ(collection->getNoteNumber(), 2);
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 0);
+    collection->clearCollection();
+    EXPECT_EQ(collection->getNoteNumber(), 0);
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 2);
+}
