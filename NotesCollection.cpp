@@ -12,8 +12,10 @@ void NotesCollection::addNote(std::shared_ptr<Note> note) {
     }
     if(!found) {
         for(auto & it : removedNotesCollection) {
-            if (it->getTitle() == note->getTitle())
+            if (it->getTitle() == note->getTitle()) {
                 removeRemovedNote(note);
+                return;
+            }
         }
         collection.push_back(std::move(note));
         noteNumber++;
@@ -160,14 +162,17 @@ void NotesCollection::addRemovedNote(std::shared_ptr<Note> note) {
         if (it->getTitle() == note->getTitle())
             found = true;
     }
-    if(!found)
+    if(!found) {
         removedNotesCollection.push_back(std::move(note));
+        removedNoteNumber++;
+    }
 }
 
 void NotesCollection::removeRemovedNote(const std::shared_ptr<Note>& note) {
     for(auto it = removedNotesCollection.begin(); it != removedNotesCollection.end(); it++) {
         if ((*it)->getTitle() == note->getTitle()) {
             removedNotesCollection.erase(it);
+            removedNoteNumber--;
             return;
         }
     }
@@ -175,6 +180,7 @@ void NotesCollection::removeRemovedNote(const std::shared_ptr<Note>& note) {
 
 void NotesCollection::emptyTheBin() {
     removedNotesCollection.clear();
+    removedNoteNumber = 0;
 }
 
 void NotesCollection::clearCollection() {
@@ -185,7 +191,7 @@ void NotesCollection::clearCollection() {
     notify();
 }
 
-void NotesCollection::copyAndPaste(const std::shared_ptr<Note> &note, NotesCollection &copyiedCollection, NotesCollection &pastedCollection) {
+void NotesCollection::copyAndPaste(const std::shared_ptr<Note> &note, NotesCollection &copyiedCollection) {
     bool found = false;
     for(auto & it : copyiedCollection.collection) {
         if (it->getTitle() == note->getTitle())
@@ -195,7 +201,7 @@ void NotesCollection::copyAndPaste(const std::shared_ptr<Note> &note, NotesColle
         throw std::runtime_error("Note doesn't exist");
     else {
         found = false;
-        for(auto & it : pastedCollection.collection) {
+        for(auto & it : this->collection) {
             if (it->getTitle() == note->getTitle())
                 found = true;
         }
@@ -203,12 +209,12 @@ void NotesCollection::copyAndPaste(const std::shared_ptr<Note> &note, NotesColle
             throw std::runtime_error("Note already exists in the collection you want to move it");
         else {
             std::shared_ptr<Note> newNote = std::make_shared<Note>(note->getTitle(), note->getText());
-            pastedCollection.addNote(newNote);
+            this->addNote(newNote);
         }
     }
 }
 
-void NotesCollection::cutAndPaste(const std::shared_ptr<Note> &note, NotesCollection &cutCollection, NotesCollection &pastedCollection) {
+void NotesCollection::cutAndPaste(const std::shared_ptr<Note> &note, NotesCollection &cutCollection) {
     bool found = false;
     for(auto & it : cutCollection.collection) {
         if (it->getTitle() == note->getTitle())
@@ -218,7 +224,7 @@ void NotesCollection::cutAndPaste(const std::shared_ptr<Note> &note, NotesCollec
         throw std::runtime_error("Note doesn't exist");
     else {
         found = false;
-        for(auto & it : pastedCollection.collection) {
+        for(auto & it : this->collection) {
             if (it->getTitle() == note->getTitle())
                 found = true;
         }
@@ -226,8 +232,12 @@ void NotesCollection::cutAndPaste(const std::shared_ptr<Note> &note, NotesCollec
             throw std::runtime_error("Note already exists in the collection you want to move it");
         else {
             std::shared_ptr<Note> newNote = std::make_shared<Note>(note->getTitle(), note->getText());
-            pastedCollection.addNote(newNote);
+            this->addNote(newNote);
             cutCollection.removeNote(note);
         }
     }
+}
+
+int NotesCollection::getRemovedNoteNumber() const {
+    return removedNoteNumber;
 }

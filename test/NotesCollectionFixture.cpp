@@ -84,3 +84,116 @@ TEST_F(NotesCollectionTest, GetterAndSetterTest) {
     collection->setName("New My Collection");
     EXPECT_EQ(collection->getName(), "New My Collection");
 }
+
+TEST_F(NotesCollectionTest, removedNotesTest) {
+    auto removedNote = std::make_shared<Note>("Removed Note", "Text");
+    collection->addNote(removedNote);
+    collection->removeNote(removedNote);
+    EXPECT_EQ(collection->getNoteNumber(), 0);
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 1);
+
+    ::testing::internal::CaptureStdout();
+    collection->printAllRemovedNotesTitle();
+    std::string output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Removed Note") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
+    collection->printAllRemovedNotes();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Removed Note") != std::string::npos);
+    EXPECT_TRUE(output.find("Text") != std::string::npos);
+
+    collection->addNote(removedNote);
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 0);
+ }
+
+TEST_F(NotesCollectionTest, emptyTheBinTest) {
+    collection->addNote(note1);
+    collection->addNote(note2);
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 0);
+    collection->removeNote(note1);
+    collection->removeNote(note2);
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 2);
+    collection->emptyTheBin();
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 0);
+}
+
+TEST_F(NotesCollectionTest, ClearCollectionTest) {
+    collection->addNote(note1);
+    collection->addNote(note2);
+    EXPECT_EQ(collection->getNoteNumber(), 2);
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 0);
+    collection->clearCollection();
+    EXPECT_EQ(collection->getNoteNumber(), 0);
+    EXPECT_EQ(collection->getRemovedNoteNumber(), 2);
+}
+
+TEST_F(NotesCollectionTest, CopyAndPasteTest) {
+    NotesCollection copiedCollection("Copied Collection");
+    NotesCollection pastedCollection("Pasted Collection");
+
+    copiedCollection.addNote(note1);
+    pastedCollection.addNote(note2);
+    EXPECT_EQ(copiedCollection.getNoteNumber(), 1);
+    EXPECT_EQ(copiedCollection.getRemovedNoteNumber(), 0);
+    EXPECT_EQ(pastedCollection.getNoteNumber(), 1);
+    EXPECT_EQ(pastedCollection.getRemovedNoteNumber(), 0);
+
+    ::testing::internal::CaptureStdout();
+    copiedCollection.printAllNotesTitle();
+    std::string output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Note 1") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
+    pastedCollection.printAllNotesTitle();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Note 2") != std::string::npos);
+
+    pastedCollection.copyAndPaste(note1, copiedCollection);
+    EXPECT_EQ(copiedCollection.getNoteNumber(), 1);
+    EXPECT_EQ(pastedCollection.getNoteNumber(), 2);
+
+    ::testing::internal::CaptureStdout();
+    copiedCollection.printAllNotesTitle();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Note 1") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
+    pastedCollection.printAllNotesTitle();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Note 2") != std::string::npos);
+    EXPECT_TRUE(output.find("Note 1") != std::string::npos);
+}
+
+TEST_F(NotesCollectionTest, CutAndPasteTest) {
+    NotesCollection cutCollection("Cut Collection");
+    NotesCollection pastedCollection("Pasted Collection");
+
+    cutCollection.addNote(note1);
+    pastedCollection.addNote(note2);
+    EXPECT_EQ(cutCollection.getNoteNumber(), 1);
+    EXPECT_EQ(cutCollection.getRemovedNoteNumber(), 0);
+    EXPECT_EQ(pastedCollection.getNoteNumber(), 1);
+    EXPECT_EQ(pastedCollection.getRemovedNoteNumber(), 0);
+
+    ::testing::internal::CaptureStdout();
+    cutCollection.printAllNotesTitle();
+    std::string output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Note 1") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
+    pastedCollection.printAllNotesTitle();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Note 2") != std::string::npos);
+
+    pastedCollection.cutAndPaste(note1, cutCollection);
+    EXPECT_EQ(cutCollection.getNoteNumber(), 0);
+    EXPECT_EQ(cutCollection.getRemovedNoteNumber(), 1);
+    EXPECT_EQ(pastedCollection.getNoteNumber(), 2);
+
+    ::testing::internal::CaptureStdout();
+    pastedCollection.printAllNotesTitle();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Note 2") != std::string::npos);
+    EXPECT_TRUE(output.find("Note 1") != std::string::npos);
+}

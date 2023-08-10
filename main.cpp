@@ -54,6 +54,9 @@ int main() {
     c2.printAllRemovedNotesTitle();
     importantNotesCollection.printAllRemovedImportantNotes();
     std::cout << "----------------------------------------------------------" << std::endl;
+
+
+
     app.detach(&c1);
     app.detach(&c2);
     app.detach(&importantNotesCollection);
