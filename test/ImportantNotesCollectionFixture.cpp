@@ -63,6 +63,77 @@ TEST_F(ImportantNotesCollectionTest, PrintAndRemoveNoteTest) {
     collection->printAllImportantNotesTitle();
     output = ::testing::internal::GetCapturedStdout();
     EXPECT_TRUE(output.find("Important Note 2") != std::string::npos);
+
+    collection->removeImportantNote(note2);
+    EXPECT_EQ(collection->getNoteNumber(), 0);
+    ::testing::internal::CaptureStdout();
+    collection->printAllImportantNotesTitle();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("No Important notes in My Important Collection") == std::string::npos);
+
+    ::testing::internal::CaptureStdout();
+    collection->printAllImportantNotes();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("No important notes in My Important Collection") == std::string::npos);
+}
+
+TEST_F(ImportantNotesCollectionTest, PrintRemovedImportantNotesTest) {
+    collection->addImportantNote(note1);
+    collection->addImportantNote(note2);
+
+    collection->removeImportantNote(note1);
+    ::testing::internal::CaptureStdout();
+    collection->printAllRemovedImportantNotesTitle();
+    std::string output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Removed important notes in My Important Collection's bin:") != std::string::npos);
+    EXPECT_TRUE(output.find("Important Note 1") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
+    collection->printAllRemovedImportantNotes();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Titles and texts of removed important notes in My Important Collection's bin:") != std::string::npos);
+    EXPECT_TRUE(output.find("Title : Important Note 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Text : Important Text 1") != std::string::npos);
+
+    collection->addImportantNote(note1);
+    ::testing::internal::CaptureStdout();
+    collection->printAllRemovedImportantNotesTitle();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("No removed important notes in My Important Collection's bin") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
+    collection->printAllRemovedImportantNotes();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("No removed important notes in My Important Collection's bin") != std::string::npos);
+
+    collection->removeImportantNote(note1);
+    collection->removeImportantNote(note2);
+    ::testing::internal::CaptureStdout();
+    collection->printAllRemovedImportantNotesTitle();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Removed important notes in My Important Collection's bin:") != std::string::npos);
+    EXPECT_TRUE(output.find("Important Note 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Important Note 2") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
+    collection->printAllRemovedImportantNotes();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Titles and texts of removed important notes in My Important Collection's bin:") != std::string::npos);
+    EXPECT_TRUE(output.find("Title : Important Note 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Text : Important Text 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Title : Important Note 2") != std::string::npos);
+    EXPECT_TRUE(output.find("Text : Important Text 2") != std::string::npos);
+
+    collection->emptyTheBinImportantNotes();
+    ::testing::internal::CaptureStdout();
+    collection->printAllRemovedImportantNotesTitle();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("No removed important notes in My Important Collection's bin") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
+    collection->printAllRemovedImportantNotes();
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("No removed important notes in My Important Collection's bin") != std::string::npos);
 }
 
 TEST_F(ImportantNotesCollectionTest, UpdateTest) {
