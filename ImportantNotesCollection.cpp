@@ -74,16 +74,24 @@ void ImportantNotesCollection::editImportantNoteText(const std::shared_ptr<Note>
 }
 
 void ImportantNotesCollection::printAllImportantNotesTitle() const {
-    std::cout << "Important notes in " << name << ":" << std::endl;
-    for(auto & it : collection)
-        std::cout << it->getTitle() << std::endl;
+    if (collection.empty())
+        std::cout << "No important notes in " << name << std::endl;
+    else {
+        std::cout << "Important notes in " << name << ":" << std::endl;
+        for (auto &it: collection)
+            std::cout << it->getTitle() << std::endl;
+    }
 }
 
 void ImportantNotesCollection::printAllImportantNotes() const {
-    std::cout << "Titles and texts of important notes in " << name << ":" << std::endl;
-    for(auto & it : collection) {
-        std::cout << "Title : " << it->getTitle() << std::endl;
-        std::cout << "Text : " << it->getText() << std::endl;
+    if (collection.empty())
+        std::cout << "No important notes in " << name << std::endl;
+    else {
+        std::cout << "Titles and texts of important notes in " << name << ":" << std::endl;
+        for(auto & it : collection) {
+            std::cout << "Title : " << it->getTitle() << std::endl;
+            std::cout << "Text : " << it->getText() << std::endl;
+        }
     }
 }
 
@@ -148,16 +156,24 @@ void ImportantNotesCollection::notify() {
 }
 
 void ImportantNotesCollection::printAllRemovedImportantNotesTitle() const {
-    std::cout << "Removed important notes in " << name << "'s bin:" << std::endl;
-    for(auto & it : removedNotesCollection)
-        std::cout << it->getTitle() << std::endl;
+    if (removedNotesCollection.empty())
+        std::cout << "No removed important notes in " << name << "'s bin" << std::endl;
+    else {
+        std::cout << "Removed important notes in " << name << "'s bin:" << std::endl;
+        for (auto &it: removedNotesCollection)
+            std::cout << it->getTitle() << std::endl;
+    }
 }
 
 void ImportantNotesCollection::printAllRemovedImportantNotes() const {
-    std::cout << "Titles and texts of removed important notes in " << name << "'s bin:" << std::endl;
-    for(auto & it : removedNotesCollection) {
-        std::cout << "Title : " << it->getTitle() << std::endl;
-        std::cout << "Text : " << it->getText() << std::endl;
+    if (removedNotesCollection.empty())
+        std::cout << "No removed important notes in " << name << "'s bin" << std::endl;
+    else {
+        std::cout << "Titles and texts of removed important notes in " << name << "'s bin:" << std::endl;
+        for (auto &it: removedNotesCollection) {
+            std::cout << "Title : " << it->getTitle() << std::endl;
+            std::cout << "Text : " << it->getText() << std::endl;
+        }
     }
 }
 
