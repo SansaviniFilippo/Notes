@@ -28,14 +28,14 @@ void ImportantNotesCollection::addImportantNote(std::shared_ptr<Note> note) {
         notify();
     }
     else
-        throw std::runtime_error("Note already exists");
+        throw std::runtime_error("ATTENTION :  Note already exists in important notes collection");
 }
 
 void ImportantNotesCollection::removeImportantNote(const std::shared_ptr<Note>& note) {
     for(auto it = collection.begin(); it != collection.end(); it++) {
         if ((*it)->getTitle() == note->getTitle()) {
             if((*it)->isBlocked())
-                throw std::runtime_error("Note is blocked");
+                throw std::runtime_error("ATTENTION :  Note is blocked");
             else {
                 addRemovedImportantNotes(note);
                 collection.erase(it);
@@ -51,7 +51,7 @@ void ImportantNotesCollection::editImportantNoteTitle(const std::shared_ptr<Note
     for(auto & it : collection) {
         if (it->getTitle() == note->getTitle()) {
             if(it->isBlocked())
-                throw std::runtime_error("Note is blocked");
+                throw std::runtime_error("ATTENTION :  Note is blocked");
             else {
                 it->setTitle(std::move(newTitle));
                 return;
@@ -64,7 +64,7 @@ void ImportantNotesCollection::editImportantNoteText(const std::shared_ptr<Note>
     for(auto & it : collection) {
         if (it->getTitle() == note->getTitle()) {
             if(it->isBlocked())
-                throw std::runtime_error("Note is blocked");
+                throw std::runtime_error("ATTENTION :  Note is blocked");
             else {
                 it->setText(std::move(newText));
                 return;
@@ -73,13 +73,13 @@ void ImportantNotesCollection::editImportantNoteText(const std::shared_ptr<Note>
     }
 }
 
-void ImportantNotesCollection::printAllImportantNotesTitle() {
+void ImportantNotesCollection::printAllImportantNotesTitle() const {
     std::cout << "Important notes in " << name << ":" << std::endl;
     for(auto & it : collection)
         std::cout << it->getTitle() << std::endl;
 }
 
-void ImportantNotesCollection::printAllImportantNotes() {
+void ImportantNotesCollection::printAllImportantNotes() const {
     std::cout << "Titles and texts of important notes in " << name << ":" << std::endl;
     for(auto & it : collection) {
         std::cout << "Title : " << it->getTitle() << std::endl;
@@ -87,7 +87,7 @@ void ImportantNotesCollection::printAllImportantNotes() {
     }
 }
 
-void ImportantNotesCollection::printOneImportantNotes(const std::shared_ptr<Note>& note) {
+void ImportantNotesCollection::printOneImportantNotes(const std::shared_ptr<Note>& note) const {
     for(auto & it : collection) {
         if (it->getTitle() == note->getTitle()) {
             std::cout << "Title : " << it->getTitle() << std::endl;
@@ -95,35 +95,35 @@ void ImportantNotesCollection::printOneImportantNotes(const std::shared_ptr<Note
             return;
         }
     }
-    throw std::runtime_error("Note not found");
+    throw std::runtime_error("ATTENTION :  Note not found in important notes collection");
 }
 
 void ImportantNotesCollection::blockImportantNotes(const std::shared_ptr<Note>& note) {
     for(auto & it : collection) {
         if (it->getTitle() == note->getTitle()) {
             if(it->isBlocked())
-                throw std::runtime_error("Note is already blocked");
+                throw std::runtime_error("ATTENTION :  Note is already blocked");
             else {
                 it->setBlocked(true);
                 return;
             }
         }
     }
-    throw std::runtime_error("Note not found");
+    throw std::runtime_error("ATTENTION :  Note not found in important notes collection");
 }
 
 void ImportantNotesCollection::unblockImportantNotes(const std::shared_ptr<Note>& note) {
     for(auto & it : collection) {
         if (it->getTitle() == note->getTitle()) {
             if(!it->isBlocked())
-                throw std::runtime_error("Note is already unblocked");
+                throw std::runtime_error("ATTENTION :  Note is already unblocked");
             else {
                 it->setBlocked(false);
                 return;
             }
         }
     }
-    throw std::runtime_error("Note not found");
+    throw std::runtime_error("ATTENTION :  Note not found in important notes collection");
 }
 
 std::string ImportantNotesCollection::getName() const {
@@ -147,13 +147,13 @@ void ImportantNotesCollection::notify() {
         observer->update();
 }
 
-void ImportantNotesCollection::printAllRemovedImportantNotesTitle() {
+void ImportantNotesCollection::printAllRemovedImportantNotesTitle() const {
     std::cout << "Removed important notes in " << name << "'s bin:" << std::endl;
     for(auto & it : removedNotesCollection)
         std::cout << it->getTitle() << std::endl;
 }
 
-void ImportantNotesCollection::printAllRemovedImportantNotes() {
+void ImportantNotesCollection::printAllRemovedImportantNotes() const {
     std::cout << "Titles and texts of removed important notes in " << name << "'s bin:" << std::endl;
     for(auto & it : removedNotesCollection) {
         std::cout << "Title : " << it->getTitle() << std::endl;
@@ -184,16 +184,24 @@ void ImportantNotesCollection::removeRemovedImportantNotes(const std::shared_ptr
 }
 
 void ImportantNotesCollection::emptyTheBinImportantNotes() {
-    removedNotesCollection.clear();
-    removedNoteNumber = 0;
+    if(removedNotesCollection.empty())
+        throw std::runtime_error("ATTENTION :  Bin is already empty");
+    else {
+        removedNotesCollection.clear();
+        removedNoteNumber = 0;
+    }
 }
 
 void ImportantNotesCollection::clearCollection() {
-    for(auto & it : collection)
-        addRemovedImportantNotes(it);
-    collection.clear();
-    noteNumber = 0;
-    notify();
+    if(collection.empty())
+        throw std::runtime_error("ATTENTION :  Collection is already empty");
+    else {
+        for (auto &it: collection)
+            addRemovedImportantNotes(it);
+        collection.clear();
+        noteNumber = 0;
+        notify();
+    }
 }
 
 int ImportantNotesCollection::getRemovedNoteNumber() const {

@@ -18,13 +18,13 @@ public:
     void clearCollection();
     void editImportantNoteTitle(const std::shared_ptr<Note>& note, std::string newTitle);
     void editImportantNoteText(const std::shared_ptr<Note>& note, std::string newText);
-    void printAllImportantNotesTitle();
-    void printAllImportantNotes();
-    void printOneImportantNotes(const std::shared_ptr<Note>& note);
+    void printAllImportantNotesTitle() const;
+    void printAllImportantNotes() const;
+    void printOneImportantNotes(const std::shared_ptr<Note>& note) const;
     void blockImportantNotes(const std::shared_ptr<Note>& note);
     void unblockImportantNotes(const std::shared_ptr<Note>& note);
-    void printAllRemovedImportantNotesTitle();
-    void printAllRemovedImportantNotes();
+    void printAllRemovedImportantNotesTitle() const;
+    void printAllRemovedImportantNotes() const;
     void emptyTheBinImportantNotes();
     std::string getName() const;
     void setName(std::string n);

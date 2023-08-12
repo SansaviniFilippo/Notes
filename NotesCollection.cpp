@@ -22,14 +22,14 @@ void NotesCollection::addNote(std::shared_ptr<Note> note) {
         notify();
     }
     else
-        throw std::runtime_error("Note already exists");
+        throw std::runtime_error("ATTENTION :  Note already exists in this collection");
 }
 
 void NotesCollection::removeNote(const std::shared_ptr<Note>& note) {
     for(auto it = collection.begin(); it != collection.end(); it++) {
         if ((*it)->getTitle() == note->getTitle()) {
             if((*it)->isBlocked())
-                throw std::runtime_error("Note is blocked");
+                throw std::runtime_error("ATTENTION :  Note is blocked");
             else {
                 addRemovedNote(note);
                 collection.erase(it);
@@ -41,13 +41,13 @@ void NotesCollection::removeNote(const std::shared_ptr<Note>& note) {
     }
 }
 
-void NotesCollection::printAllNotesTitle() {
+void NotesCollection::printAllNotesTitle() const {
     std::cout << "Notes in " << name << ":" << std::endl;
     for(auto & it : collection)
         std::cout << it->getTitle() << std::endl;
 }
 
-void NotesCollection::printAllNotes() {
+void NotesCollection::printAllNotes() const {
     std::cout << "Titles and texts of notes in " << name << ":" << std::endl;
     for(auto & it : collection) {
         std::cout << "Title : " << it->getTitle() << std::endl;
@@ -63,7 +63,7 @@ void NotesCollection::setName(std::string n) {
     name = std::move(n);
 }
 
-void NotesCollection::printOneNotes(const std::shared_ptr<Note>& note) {
+void NotesCollection::printOneNotes(const std::shared_ptr<Note>& note) const {
     for(auto & it : collection) {
         if (it->getTitle() == note->getTitle()) {
             std::cout << "Title : " << it->getTitle() << std::endl;
@@ -71,32 +71,35 @@ void NotesCollection::printOneNotes(const std::shared_ptr<Note>& note) {
             return;
         }
     }
+    throw std::runtime_error("ATTENTION :  Note not found in this collection");
 }
 
 void NotesCollection::editNoteTitle(const std::shared_ptr<Note>& note, std::string newTitle) {
     for(auto & it : collection) {
         if (it->getTitle() == note->getTitle()) {
             if(it->isBlocked())
-                throw std::runtime_error("Note is blocked");
+                throw std::runtime_error("ATTENTION :  Note is blocked");
             else {
                 it->setTitle(std::move(newTitle));
                 return;
             }
         }
     }
+    throw std::runtime_error("ATTENTION :  Note not found in this collection");
 }
 
 void NotesCollection::editNoteText(const std::shared_ptr<Note>& note, std::string newText) {
     for(auto & it : collection) {
         if (it->getTitle() == note->getTitle()) {
             if(it->isBlocked())
-                throw std::runtime_error("Note is blocked");
+                throw std::runtime_error("ATTENTION :  Note is blocked");
             else {
                 it->setText(std::move(newText));
                 return;
             }
         }
     }
+    throw std::runtime_error("ATTENTION :  Note not found in this collection");
 }
 
 void NotesCollection::subscribe(Observer* o) {
@@ -116,39 +119,41 @@ void NotesCollection::block(const std::shared_ptr<Note>& note) {
     for(auto & it : collection) {
         if (it->getTitle() == note->getTitle()) {
             if(it->isBlocked())
-                throw std::runtime_error("Note is already blocked");
+                throw std::runtime_error("ATTENTION :  Note is already blocked");
             else {
                 it->setBlocked(true);
                 return;
             }
         }
     }
+    throw std::runtime_error("ATTENTION :  Note not found in this collection");
 }
 
 void NotesCollection::unblock(const std::shared_ptr<Note>& note) {
     for(auto & it : collection) {
         if (it->getTitle() == note->getTitle()) {
             if(!it->isBlocked())
-                throw std::runtime_error("Note is already unblocked");
+                throw std::runtime_error("ATTENTION :  Note is already unblocked");
             else {
                 it->setBlocked(false);
                 return;
             }
         }
     }
+    throw std::runtime_error("ATTENTION :  Note not found in this collection");
 }
 
 int NotesCollection::getNoteNumber() const {
     return noteNumber;
 }
 
-void NotesCollection::printAllRemovedNotesTitle() {
+void NotesCollection::printAllRemovedNotesTitle() const {
     std::cout << "Removed Notes in " << name << "'s bin:" << std::endl;
     for(auto & it : removedNotesCollection)
         std::cout << it->getTitle() << std::endl;
 }
 
-void NotesCollection::printAllRemovedNotes() {
+void NotesCollection::printAllRemovedNotes() const {
     std::cout << "Titles and texts of removed notes in " << name << "'s bin:" << std::endl;
     for(auto & it : removedNotesCollection) {
         std::cout << "Title : " << it->getTitle() << std::endl;
@@ -179,62 +184,23 @@ void NotesCollection::removeRemovedNote(const std::shared_ptr<Note>& note) {
 }
 
 void NotesCollection::emptyTheBin() {
-    removedNotesCollection.clear();
-    removedNoteNumber = 0;
+    if(removedNotesCollection.empty())
+        throw std::runtime_error("ATTENTION :  Bin is already empty");
+    else {
+        removedNotesCollection.clear();
+        removedNoteNumber = 0;
+    }
 }
 
 void NotesCollection::clearCollection() {
-    for(auto & it : collection)
-        addRemovedNote(it);
-    collection.clear();
-    noteNumber = 0;
-    notify();
-}
-
-void NotesCollection::copyAndPaste(const std::shared_ptr<Note> &note, NotesCollection &copyiedCollection) {
-    bool found = false;
-    for(auto & it : copyiedCollection.collection) {
-        if (it->getTitle() == note->getTitle())
-            found = true;
-    }
-    if(!found)
-        throw std::runtime_error("Note doesn't exist");
+    if(collection.empty())
+        throw std::runtime_error("ATTENTION :  Collection is already empty");
     else {
-        found = false;
-        for(auto & it : this->collection) {
-            if (it->getTitle() == note->getTitle())
-                found = true;
-        }
-        if(found)
-            throw std::runtime_error("Note already exists in the collection you want to move it");
-        else {
-            std::shared_ptr<Note> newNote = std::make_shared<Note>(note->getTitle(), note->getText());
-            this->addNote(newNote);
-        }
-    }
-}
-
-void NotesCollection::cutAndPaste(const std::shared_ptr<Note> &note, NotesCollection &cutCollection) {
-    bool found = false;
-    for(auto & it : cutCollection.collection) {
-        if (it->getTitle() == note->getTitle())
-            found = true;
-    }
-    if(!found)
-        throw std::runtime_error("Note doesn't exist");
-    else {
-        found = false;
-        for(auto & it : this->collection) {
-            if (it->getTitle() == note->getTitle())
-                found = true;
-        }
-        if(found)
-            throw std::runtime_error("Note already exists in the collection you want to move it");
-        else {
-            std::shared_ptr<Note> newNote = std::make_shared<Note>(note->getTitle(), note->getText());
-            this->addNote(newNote);
-            cutCollection.removeNote(note);
-        }
+        for (auto &it: collection)
+            addRemovedNote(it);
+        collection.clear();
+        noteNumber = 0;
+        notify();
     }
 }
 
