@@ -42,16 +42,24 @@ void NotesCollection::removeNote(const std::shared_ptr<Note>& note) {
 }
 
 void NotesCollection::printAllNotesTitle() const {
-    std::cout << "Notes in " << name << ":" << std::endl;
-    for(auto & it : collection)
-        std::cout << it->getTitle() << std::endl;
+    if(collection.empty())
+        std::cout << "No notes in " << name << std::endl;
+    else {
+        std::cout << "Notes in " << name << ":" << std::endl;
+        for(auto & it : collection)
+            std::cout << it->getTitle() << std::endl;
+    }
 }
 
 void NotesCollection::printAllNotes() const {
-    std::cout << "Titles and texts of notes in " << name << ":" << std::endl;
-    for(auto & it : collection) {
-        std::cout << "Title : " << it->getTitle() << std::endl;
-        std::cout << "Text : " << it->getText() << std::endl;
+    if(collection.empty())
+        std::cout << "No notes in " << name << std::endl;
+    else {
+        std::cout << "Titles and texts of notes in " << name << ":" << std::endl;
+        for(auto & it : collection) {
+            std::cout << "Title : " << it->getTitle() << std::endl;
+            std::cout << "Text : " << it->getText() << std::endl;
+        }
     }
 }
 
@@ -148,16 +156,24 @@ int NotesCollection::getNoteNumber() const {
 }
 
 void NotesCollection::printAllRemovedNotesTitle() const {
-    std::cout << "Removed Notes in " << name << "'s bin:" << std::endl;
-    for(auto & it : removedNotesCollection)
-        std::cout << it->getTitle() << std::endl;
+    if(removedNotesCollection.empty())
+        std::cout << "No removed notes in " << name << "'s bin" << std::endl;
+    else {
+        std::cout << "Removed Notes in " << name << "'s bin:" << std::endl;
+        for(auto & it : removedNotesCollection)
+            std::cout << it->getTitle() << std::endl;
+    }
 }
 
 void NotesCollection::printAllRemovedNotes() const {
-    std::cout << "Titles and texts of removed notes in " << name << "'s bin:" << std::endl;
-    for(auto & it : removedNotesCollection) {
-        std::cout << "Title : " << it->getTitle() << std::endl;
-        std::cout << "Text : " << it->getText() << std::endl;
+    if(removedNotesCollection.empty())
+        std::cout << "No removed notes in " << name << "'s bin" << std::endl;
+    else {
+        std::cout << "Titles and texts of removed notes in " << name << "'s bin:" << std::endl;
+        for(auto & it : removedNotesCollection) {
+            std::cout << "Title : " << it->getTitle() << std::endl;
+            std::cout << "Text : " << it->getText() << std::endl;
+        }
     }
 }
 
