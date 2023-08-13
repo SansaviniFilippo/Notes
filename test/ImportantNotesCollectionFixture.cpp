@@ -17,6 +17,7 @@ protected:
     void TearDown() override {
         note1.reset();
         note2.reset();
+        note3.reset();
     }
     ImportantNotesCollection collection;
     std::shared_ptr<Note> note1;
@@ -184,9 +185,11 @@ TEST_F(ImportantNotesCollectionTest, emptyTheBinTest) {
     collection.addImportantNote(note1);
     collection.addImportantNote(note2);
     EXPECT_EQ(collection.getRemovedNoteNumber(), 0);
+
     collection.removeImportantNote(note1);
     collection.removeImportantNote(note2);
     EXPECT_EQ(collection.getRemovedNoteNumber(), 2);
+
     collection.emptyTheBinImportantNotes();
     EXPECT_EQ(collection.getRemovedNoteNumber(), 0);
 }
@@ -196,6 +199,7 @@ TEST_F(ImportantNotesCollectionTest, ClearCollectionTest) {
     collection.addImportantNote(note2);
     EXPECT_EQ(collection.getNoteNumber(), 2);
     EXPECT_EQ(collection.getRemovedNoteNumber(), 0);
+
     collection.clearCollection();
     EXPECT_EQ(collection.getNoteNumber(), 0);
     EXPECT_EQ(collection.getRemovedNoteNumber(), 2);

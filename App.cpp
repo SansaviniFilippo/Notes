@@ -2,9 +2,12 @@
 // Created by filippo on 21/07/23.
 //
 
+#include <algorithm>
 #include "App.h"
 
 void App::update() {
+    if(collectionsNumber == 0)
+        throw std::runtime_error("ATTENTION : No collections attached");
     for (const auto& it : collections) {
         auto collection = dynamic_cast<NotesCollection*>(it);
         if (collection) {
@@ -24,12 +27,16 @@ void App::update() {
 }
 
 void App::attach(Subject* subject) {
+    std::any_of(collections.begin(), collections.end(), [subject](const Subject* s)
+    { return s == subject; }) ? throw std::invalid_argument("ATTENTION : Subject already attached") :
     collections.push_back(subject);
     collections.back()->subscribe(this);
     collectionsNumber++;
 }
 
 void App::detach(Subject* subject) {
+    std::none_of(collections.begin(), collections.end(), [subject](const Subject* s)
+    { return s == subject; }) ? throw std::invalid_argument("ATTENTION : Subject not attached") :
     collections.back()->unsubscribe(this);
     collections.remove(subject);
     collectionsNumber--;

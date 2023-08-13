@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 #include "../Note.h"
 
-TEST(NotesTests, GetterAndSetterTest) {
+TEST(NotesSuiteTest, GetterAndSetterTest) {
     auto note = std::make_shared<Note>("Title", "Text", false);
     EXPECT_EQ(note->getTitle(), "Title");
     EXPECT_EQ(note->getText(), "Text");
@@ -19,7 +19,7 @@ TEST(NotesTests, GetterAndSetterTest) {
     EXPECT_TRUE(note->isBlocked());
 }
 
-TEST(NotesTests, EmptyInitializationTest) {
+TEST(NotesSuiteTest, EmptyInitializationTest) {
     auto note = std::make_shared<Note>("","");
     EXPECT_EQ(note->getTitle(), "");
     EXPECT_EQ(note->getText(), "");

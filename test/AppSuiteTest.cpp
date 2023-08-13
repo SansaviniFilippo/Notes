@@ -34,6 +34,13 @@ TEST(AppSuiteTest, UpdateTest) {
     app.detach(&collection1);
     app.detach(&collection2);
     app.detach(&importantCollection);
+
+    EXPECT_THROW(app.update(), std::runtime_error);
+    try {
+        app.update();
+    } catch (const std::runtime_error& e) {
+        EXPECT_STREQ(e.what(), "ATTENTION : No collections attached");
+    }
 }
 
 TEST(AppSuiteTest, AttachAndDetachTest) {
@@ -56,4 +63,57 @@ TEST(AppSuiteTest, AttachAndDetachTest) {
     app.detach(&collection1);
     app.detach(&importantCollection);
     EXPECT_EQ(app.getCollectionsNumber(), 0);
+}
+
+TEST(AppSuiteTest, AttachAndDetachExceptionTest) {
+    App app;
+    NotesCollection collection1("My Collection 1");
+    NotesCollection collection2("My Collection 2");
+    ImportantNotesCollection importantCollection("My Important Collection");
+
+    app.attach(&collection1);
+    app.attach(&collection2);
+    app.attach(&importantCollection);
+
+    EXPECT_THROW(app.attach(&collection1), std::invalid_argument);
+    try {
+        app.attach(&collection1);
+    } catch (const std::invalid_argument& e) {
+        EXPECT_STREQ(e.what(), "ATTENTION : Subject already attached");
+    }
+    EXPECT_THROW(app.attach(&collection2), std::invalid_argument);
+    try {
+        app.attach(&collection2);
+    } catch (const std::invalid_argument& e) {
+        EXPECT_STREQ(e.what(), "ATTENTION : Subject already attached");
+    }
+    EXPECT_THROW(app.attach(&importantCollection), std::invalid_argument);
+    try {
+        app.attach(&importantCollection);
+    } catch (const std::invalid_argument& e) {
+        EXPECT_STREQ(e.what(), "ATTENTION : Subject already attached");
+    }
+
+    app.detach(&collection1);
+    app.detach(&collection2);
+    app.detach(&importantCollection);
+
+    EXPECT_THROW(app.detach(&collection1), std::invalid_argument);
+    try {
+        app.detach(&collection1);
+    } catch (const std::invalid_argument& e) {
+        EXPECT_STREQ(e.what(), "ATTENTION : Subject not attached");
+    }
+    EXPECT_THROW(app.detach(&collection2), std::invalid_argument);
+    try {
+        app.detach(&collection2);
+    } catch (const std::invalid_argument& e) {
+        EXPECT_STREQ(e.what(), "ATTENTION : Subject not attached");
+    }
+    EXPECT_THROW(app.detach(&importantCollection), std::invalid_argument);
+    try {
+        app.detach(&importantCollection);
+    } catch (const std::invalid_argument& e) {
+        EXPECT_STREQ(e.what(), "ATTENTION : Subject not attached");
+    }
 }
