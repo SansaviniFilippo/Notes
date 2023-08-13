@@ -14,7 +14,7 @@ void NotesCollection::addNote(std::shared_ptr<Note> note) {
         for(auto & it : removedNotesCollection) {
             if (it->getTitle() == note->getTitle()) {
                 removeRemovedNote(note);
-                return;
+                break;
             }
         }
         collection.push_back(std::move(note));
@@ -39,6 +39,7 @@ void NotesCollection::removeNote(const std::shared_ptr<Note>& note) {
             }
         }
     }
+    throw std::runtime_error("ATTENTION :  Note not found in this collection");
 }
 
 void NotesCollection::printAllNotesTitle() const {
