@@ -45,6 +45,7 @@ void ImportantNotesCollection::removeImportantNote(const std::shared_ptr<Note>& 
             }
         }
     }
+    throw std::runtime_error("ATTENTION :  Note not found in important notes collection");
 }
 
 void ImportantNotesCollection::editImportantNoteTitle(const std::shared_ptr<Note>& note, std::string newTitle) {
@@ -58,6 +59,7 @@ void ImportantNotesCollection::editImportantNoteTitle(const std::shared_ptr<Note
             }
         }
     }
+    throw std::runtime_error("ATTENTION :  Note not found in important notes collection");
 }
 
 void ImportantNotesCollection::editImportantNoteText(const std::shared_ptr<Note>& note, std::string newText) {
@@ -71,6 +73,7 @@ void ImportantNotesCollection::editImportantNoteText(const std::shared_ptr<Note>
             }
         }
     }
+    throw std::runtime_error("ATTENTION :  Note not found in important notes collection");
 }
 
 void ImportantNotesCollection::printAllImportantNotesTitle() const {
