@@ -8,18 +8,32 @@
 #include "../ImportantNotesCollection.h"
 #include "../App.h"
 
-TEST(AppSuiteTest, UpdateTest) {
-    App app;
-    NotesCollection collection1("My Collection 1");
-    NotesCollection collection2("My Collection 2");
-    ImportantNotesCollection importantCollection("My Important Collection");
-    auto note1 = std::make_shared<Note>("Title 1", "Text 1", false);
-    auto note2 = std::make_shared<Note>("Title 2", "Text 2", false);
-    auto note3 = std::make_shared<Note>("Title 3", "Text 3", true);
-    collection1.addNote(note1);
-    collection1.addNote(note2);
-    importantCollection.addImportantNote(note3);
+class AppFixtureTest : public ::testing::Test {
+protected:
+    void SetUp() override {
+        note1 = std::make_shared<Note>("Title 1", "Text 1", false);
+        note2 = std::make_shared<Note>("Title 2", "Text 2", false);
+        note3 = std::make_shared<Note>("Title 3", "Text 3", true);
 
+        collection1.addNote(note1);
+        collection1.addNote(note2);
+        importantCollection.addImportantNote(note3);
+    }
+    void TearDown() override {
+        note1.reset();
+        note2.reset();
+        note3.reset();
+    }
+    App app;
+    NotesCollection collection1{"My Collection 1"};
+    NotesCollection collection2{"My Collection 2"};
+    ImportantNotesCollection importantCollection{"My Important Collection"};
+    std::shared_ptr<Note> note1;
+    std::shared_ptr<Note> note2;
+    std::shared_ptr<Note> note3;
+};
+
+TEST_F(AppFixtureTest, UpdateTest) {
     app.attach(&collection1);
     app.attach(&collection2);
     app.attach(&importantCollection);
@@ -43,15 +57,9 @@ TEST(AppSuiteTest, UpdateTest) {
     }
 }
 
-TEST(AppSuiteTest, AttachAndDetachTest) {
-    App app;
-    NotesCollection collection1("My Collection 1");
-    NotesCollection collection2("My Collection 2");
-    ImportantNotesCollection importantCollection("My Important Collection");
-
+TEST_F(AppFixtureTest, AttachAndDetachTest) {
     app.attach(&collection1);
     app.attach(&collection2);
-
     EXPECT_EQ(app.getCollectionsNumber(), 2);
 
     app.attach(&importantCollection);
@@ -65,12 +73,7 @@ TEST(AppSuiteTest, AttachAndDetachTest) {
     EXPECT_EQ(app.getCollectionsNumber(), 0);
 }
 
-TEST(AppSuiteTest, AttachAndDetachExceptionTest) {
-    App app;
-    NotesCollection collection1("My Collection 1");
-    NotesCollection collection2("My Collection 2");
-    ImportantNotesCollection importantCollection("My Important Collection");
-
+TEST_F(AppFixtureTest, AttachAndDetachExceptionTest) {
     app.attach(&collection1);
     app.attach(&collection2);
     app.attach(&importantCollection);
