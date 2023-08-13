@@ -20,7 +20,7 @@ void ImportantNotesCollection::addImportantNote(std::shared_ptr<Note> note) {
         for(auto & it : removedNotesCollection) {
             if (it->getTitle() == note->getTitle()) {
                 removeRemovedImportantNotes(note);
-                return;
+                break;
             }
         }
         collection.push_back(std::move(note));
