@@ -6,7 +6,7 @@
 #include "../Note.h"
 
 TEST(NotesTests, GetterAndSetterTest) {
-    auto note = std::make_unique<Note>("Title", "Text", false);
+    auto note = std::make_shared<Note>("Title", "Text", false);
     EXPECT_EQ(note->getTitle(), "Title");
     EXPECT_EQ(note->getText(), "Text");
     EXPECT_FALSE(note->isBlocked());
@@ -20,7 +20,7 @@ TEST(NotesTests, GetterAndSetterTest) {
 }
 
 TEST(NotesTests, EmptyInitializationTest) {
-    auto note = std::make_unique<Note>("","");
+    auto note = std::make_shared<Note>("","");
     EXPECT_EQ(note->getTitle(), "");
     EXPECT_EQ(note->getText(), "");
     EXPECT_FALSE(note->isBlocked());
