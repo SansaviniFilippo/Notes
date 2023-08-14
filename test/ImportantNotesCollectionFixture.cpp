@@ -140,29 +140,9 @@ TEST_F(ImportantNotesCollectionTest, PrintRemovedImportantNotesTest) {
     EXPECT_TRUE(output.find("No removed important notes in My Important Collection's bin") != std::string::npos);
 }
 
-TEST_F(ImportantNotesCollectionTest, UpdateTest) {
-    collection.addImportantNote(note1);
-    collection.editImportantNoteTitle(note1, "New Note 1");
-    EXPECT_EQ(note1->getTitle(), "New Note 1");
-    collection.editImportantNoteText(note1, "New Text 1");
-    EXPECT_EQ(note1->getText(), "New Text 1");
-}
-
-TEST_F(ImportantNotesCollectionTest, BlockedTest) {
-    collection.addImportantNote(note1);
-    EXPECT_FALSE(note1->isBlocked());
-
-    collection.blockImportantNotes(note1);
-    EXPECT_TRUE(note1->isBlocked());
-
-    collection.unblockImportantNotes(note1);
-    EXPECT_FALSE(note1->isBlocked());
-}
-
 TEST_F(ImportantNotesCollectionTest, GetterTest) {
     EXPECT_EQ(collection.getName(), "My Important Collection");
 }
-
 
 TEST_F(ImportantNotesCollectionTest, removedImportantNotesTest) {
     EXPECT_EQ(collection.getNoteNumber(), 0);
@@ -222,7 +202,7 @@ TEST_F(ImportantNotesCollectionTest, ExceptionThrowTest) {
         EXPECT_STREQ("ATTENTION :  Note is blocked", e.what());
     }
 
-    collection.unblockImportantNotes(note1);
+    note1->setBlocked(false);
     collection.removeImportantNote(note1);
     EXPECT_THROW(collection.removeImportantNote(note1), std::runtime_error);
     try {
@@ -238,66 +218,6 @@ TEST_F(ImportantNotesCollectionTest, ExceptionThrowTest) {
         EXPECT_STREQ("ATTENTION :  Note not found in important notes collection", e.what());
     }
 
-    EXPECT_THROW(collection.editImportantNoteTitle(note1, "New title"), std::runtime_error);
-    try {
-        collection.editImportantNoteTitle(note1, "New title");
-    } catch (std::runtime_error& e) {
-        EXPECT_STREQ("ATTENTION :  Note not found in important notes collection", e.what());
-    }
-
-    EXPECT_THROW(collection.editImportantNoteText(note1, "New text"), std::runtime_error);
-    try {
-        collection.editImportantNoteText(note1, "New text");
-    } catch (std::runtime_error& e) {
-        EXPECT_STREQ("ATTENTION :  Note not found in important notes collection", e.what());
-    }
-
-    EXPECT_THROW(collection.blockImportantNotes(note1), std::runtime_error);
-    try {
-        collection.blockImportantNotes(note1);
-    } catch (std::runtime_error& e) {
-        EXPECT_STREQ("ATTENTION :  Note not found in important notes collection", e.what());
-    }
-
-    EXPECT_THROW(collection.unblockImportantNotes(note1), std::runtime_error);
-    try {
-        collection.unblockImportantNotes(note1);
-    } catch (std::runtime_error& e) {
-        EXPECT_STREQ("ATTENTION :  Note not found in important notes collection", e.what());
-    }
-
-    collection.addImportantNote(note1);
-    collection.blockImportantNotes(note1);
-    EXPECT_THROW(collection.editImportantNoteTitle(note1, "New title"), std::runtime_error);
-    try {
-        collection.editImportantNoteTitle(note1, "New title");
-    } catch (std::runtime_error& e) {
-        EXPECT_STREQ("ATTENTION :  Note is blocked", e.what());
-    }
-
-    EXPECT_THROW(collection.editImportantNoteText(note1, "New text"), std::runtime_error);
-    try {
-        collection.editImportantNoteText(note1, "New text");
-    } catch (std::runtime_error& e) {
-        EXPECT_STREQ("ATTENTION :  Note is blocked", e.what());
-    }
-
-    EXPECT_THROW(collection.blockImportantNotes(note1), std::runtime_error);
-    try {
-        collection.blockImportantNotes(note1);
-    } catch (std::runtime_error& e) {
-        EXPECT_STREQ("ATTENTION :  Note is already blocked", e.what());
-    }
-
-    collection.unblockImportantNotes(note1);
-    EXPECT_THROW(collection.unblockImportantNotes(note1), std::runtime_error);
-    try {
-        collection.unblockImportantNotes(note1);
-    } catch (std::runtime_error& e) {
-        EXPECT_STREQ("ATTENTION :  Note is already unblocked", e.what());
-    }
-
-    collection.clearCollection();
     EXPECT_THROW(collection.clearCollection(), std::runtime_error);
     try {
         collection.clearCollection();

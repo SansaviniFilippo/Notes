@@ -33,7 +33,7 @@ int main() {
         std::cout << e.what() << std::endl;
     }
     try {
-        iC.addImportantNote(n3);
+        iC.addImportantNote(n1);
     } catch (std::runtime_error& e) {
         std::cout << e.what() << std::endl;
     }
@@ -59,11 +59,6 @@ int main() {
     } catch (std::runtime_error& e) {
         std::cout << e.what() << std::endl;
     }
-    try {
-        iC.editImportantNoteTitle(n3, "new title important note");
-    } catch (std::runtime_error& e) {
-        std::cout << e.what() << std::endl;
-    }
 
     std::cout << "5 ----------" << std::endl;
     try {
@@ -77,7 +72,7 @@ int main() {
         std::cout << e.what() << std::endl;
     }
     try {
-        iC.printOneImportantNotes(n3);
+        iC.printOneImportantNotes(n1);
     } catch (std::runtime_error& e) {
         std::cout << e.what() << std::endl;
     }
@@ -124,7 +119,7 @@ int main() {
 
     std::cout << "10 ----------" << std::endl;
     try {
-        iC.removeImportantNote(n3);
+        iC.removeImportantNote(n1);
     } catch (std::runtime_error& e) {
         std::cout << e.what() << std::endl;
     }
