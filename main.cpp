@@ -21,7 +21,6 @@ int main() {
 
     std::cout << "Start" << std::endl;
     std::cout << "1 ----------" << std::endl;
-    c1.addNote(n1);
     try {
         c1.addNote(n1);
     } catch (std::runtime_error& e) {

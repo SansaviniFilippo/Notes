@@ -13,9 +13,11 @@ class App : public Observer {
 public:
     App() : collectionsNumber(0) {}
     ~App() override = default;
+
     void update() override;
     void attach(Subject* subject) override;
     void detach(Subject* subject) override;
+
     int getCollectionsNumber() const;
 private:
     std::list<Subject*> collections;

@@ -3,7 +3,6 @@
 //
 
 #include "ImportantNotesCollection.h"
-
 #include <utility>
 
 void ImportantNotesCollection::addImportantNote(std::shared_ptr<Note> note) {

@@ -13,15 +13,19 @@
 class ImportantNotesCollection : public Subject {
 public:
     explicit ImportantNotesCollection(std::string n = "Important Notes Collection") : name(std::move(n)), noteNumber(0), removedNoteNumber(0) {}
+
     void addImportantNote(std::shared_ptr<Note> note);
     void removeImportantNote(const std::shared_ptr<Note>& note);
     void clearCollection();
+
     void printAllImportantNotesTitle() const;
     void printAllImportantNotes() const;
     void printOneImportantNotes(const std::shared_ptr<Note>& note) const;
+
     void printAllRemovedImportantNotesTitle() const;
     void printAllRemovedImportantNotes() const;
     void emptyTheBinImportantNotes();
+
     std::string getName() const;
     int getNoteNumber() const;
     int getRemovedNoteNumber() const;
