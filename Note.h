@@ -10,9 +10,11 @@
 class Note {
 public:
     Note(std::string ti, std::string te, bool bl = false);
+
     std::string getTitle() const;
     std::string getText() const;
     bool isBlocked() const;
+
     void setTitle(std::string ti);
     void setText(std::string te);
     void setBlocked(bool bl);
