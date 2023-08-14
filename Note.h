@@ -9,7 +9,7 @@
 
 class Note {
 public:
-    Note(std::string ti, std::string te, bool bl = false) : title(std::move(ti)), text(std::move(te)), blocked(bl) {}
+    Note(std::string ti, std::string te, bool bl = false);
     std::string getTitle() const;
     std::string getText() const;
     bool isBlocked() const;

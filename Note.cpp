@@ -4,6 +4,8 @@
 
 #include "Note.h"
 
+Note::Note(std::string ti, std::string te, bool bl) : title(std::move(ti)), text(std::move(te)), blocked(bl) {}
+
 std::string Note::getTitle() const {
     return title;
 }
