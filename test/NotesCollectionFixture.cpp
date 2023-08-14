@@ -22,6 +22,7 @@ protected:
 };
 
 TEST_F(NotesCollectionTest, AddNoteTest) {
+    EXPECT_EQ(collection.getNoteNumber(), 0);
     collection.addNote(note1);
     collection.addNote(note2);
     EXPECT_EQ(collection.getNoteNumber(), 2);
@@ -37,6 +38,12 @@ TEST_F(NotesCollectionTest, PrintAndRemoveTest) {
     EXPECT_TRUE(output.find("Notes in My Collection:") != std::string::npos);
     EXPECT_TRUE(output.find("Note 1") != std::string::npos);
     EXPECT_TRUE(output.find("Note 2") != std::string::npos);
+
+    ::testing::internal::CaptureStdout();
+    collection.printOneNotes(note1);
+    output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Title : Note 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Text : Text 1") != std::string::npos);
 
     ::testing::internal::CaptureStdout();
     collection.printAllNotes();
@@ -75,7 +82,7 @@ TEST_F(NotesCollectionTest, PrintAndRemoveTest) {
     EXPECT_TRUE(output.find("No notes in My Collection") != std::string::npos);
 }
 
-TEST_F(NotesCollectionTest, UpdateTest) {
+TEST_F(NotesCollectionTest, EditTitleAndTextTest) {
     collection.addNote(note1);
     collection.editNoteTitle(note1, "New Note 1");
     EXPECT_EQ(note1->getTitle(), "New Note 1");
@@ -87,8 +94,10 @@ TEST_F(NotesCollectionTest, BlockedTest) {
     auto note3 = std::make_shared<Note>("Note 3", "Text 3", false);
     collection.addNote(note3);
     EXPECT_FALSE(note3->isBlocked());
+
     collection.block(note3);
     EXPECT_TRUE(note3->isBlocked());
+
     collection.unblock(note3);
     EXPECT_FALSE(note3->isBlocked());
 }
@@ -118,13 +127,13 @@ TEST_F(NotesCollectionTest, PrintRemovedNotesTest) {
     ::testing::internal::CaptureStdout();
     collection.printAllRemovedNotesTitle();
     output = ::testing::internal::GetCapturedStdout();
-    EXPECT_TRUE(output.find("Removed Notes in My Collection's bin") != std::string::npos);
+    EXPECT_TRUE(output.find("Removed Notes in My Collection's bin:") != std::string::npos);
     EXPECT_TRUE(output.find("Note 2") != std::string::npos);
 
     ::testing::internal::CaptureStdout();
     collection.printAllRemovedNotes();
     output = ::testing::internal::GetCapturedStdout();
-    EXPECT_TRUE(output.find("Titles and texts of removed notes in My Collection's bin") != std::string::npos);
+    EXPECT_TRUE(output.find("Titles and texts of removed notes in My Collection's bin:") != std::string::npos);
     EXPECT_TRUE(output.find("Title : Note 2") != std::string::npos);
     EXPECT_TRUE(output.find("Text : Text 2") != std::string::npos);
 
@@ -133,14 +142,14 @@ TEST_F(NotesCollectionTest, PrintRemovedNotesTest) {
     ::testing::internal::CaptureStdout();
     collection.printAllRemovedNotesTitle();
     output = ::testing::internal::GetCapturedStdout();
-    EXPECT_TRUE(output.find("Removed Notes in My Collection's bin") != std::string::npos);
+    EXPECT_TRUE(output.find("Removed Notes in My Collection's bin:") != std::string::npos);
     EXPECT_TRUE(output.find("Note 2") != std::string::npos);
     EXPECT_TRUE(output.find("Note 1") != std::string::npos);
 
     ::testing::internal::CaptureStdout();
     collection.printAllRemovedNotes();
     output = ::testing::internal::GetCapturedStdout();
-    EXPECT_TRUE(output.find("Titles and texts of removed notes in My Collection's bin") != std::string::npos);
+    EXPECT_TRUE(output.find("Titles and texts of removed notes in My Collection's bin:") != std::string::npos);
     EXPECT_TRUE(output.find("Title : Note 2") != std::string::npos);
     EXPECT_TRUE(output.find("Text : Text 2") != std::string::npos);
     EXPECT_TRUE(output.find("Title : Note 1") != std::string::npos);
