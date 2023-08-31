@@ -21,6 +21,52 @@ protected:
     std::shared_ptr<Note> note2;
 };
 
+// AGGIUNTA POST REVISIONE
+
+TEST_F(NotesCollectionTest, BlockedNotesTest) {
+    collection.addNote(note1);
+    collection.addNote(note2);
+    note1->setBlocked(true);
+    note2->setBlocked(true);
+    EXPECT_EQ(collection.getNoteNumber(), 2);
+    EXPECT_EQ(note1->getTitle(), "Note 1");
+    EXPECT_EQ(note1->getText(), "Text 1");
+    EXPECT_EQ(note2->getTitle(), "Note 2");
+    EXPECT_EQ(note2->getText(), "Text 2");
+
+    try {
+        collection.editNoteTitle(note1, "New Note 1");
+    } catch (std::runtime_error& e) {
+        EXPECT_STREQ("ATTENTION :  Note is blocked", e.what());
+    }
+    EXPECT_EQ(note1->getTitle(), "Note 1");
+    try {
+        collection.editNoteText(note1, "New Text 1");
+    } catch (std::runtime_error& e) {
+        EXPECT_STREQ("ATTENTION :  Note is blocked", e.what());
+    }
+    EXPECT_EQ(note1->getText(), "Text 1");
+
+    try {
+        collection.removeNote(note2);
+    } catch (std::runtime_error& e) {
+        EXPECT_STREQ("ATTENTION :  Note is blocked", e.what());
+    }
+    EXPECT_EQ(collection.getNoteNumber(), 2);
+
+    EXPECT_EQ(note1->getTitle(), "Note 1");
+    EXPECT_EQ(note1->getText(), "Text 1");
+    EXPECT_EQ(note2->getTitle(), "Note 2");
+    EXPECT_EQ(note2->getText(), "Text 2");
+
+    ::testing::internal::CaptureStdout();
+    collection.printAllNotesTitle();
+    std::string output = ::testing::internal::GetCapturedStdout();
+    EXPECT_TRUE(output.find("Notes in My Collection:") != std::string::npos);
+    EXPECT_TRUE(output.find("Note 1") != std::string::npos);
+    EXPECT_TRUE(output.find("Note 2") != std::string::npos);
+}
+
 TEST_F(NotesCollectionTest, AddNoteTest) {
     EXPECT_EQ(collection.getNoteNumber(), 0);
     collection.addNote(note1);
